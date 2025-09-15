@@ -1,30 +1,82 @@
-import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle, Clock, MapPin, Phone } from "lucide-react";
+import { CheckCircle, Clock, MapPin, Phone, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const OrderSuccess = () => {
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [paymentData, setPaymentData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
-  const orderData = location.state?.orderData;
-  const items = location.state?.items || [];
-  const total = location.state?.total || 0;
+  const sessionId = searchParams.get('session_id');
 
-  // Redirect if no order data
   useEffect(() => {
-    if (!orderData) {
-      navigate("/");
-    }
-  }, [orderData, navigate]);
+    const verifyPayment = async () => {
+      if (!sessionId) {
+        navigate("/");
+        return;
+      }
 
-  if (!orderData) {
+      try {
+        const { data, error } = await supabase.functions.invoke('verify-payment', {
+          body: { sessionId }
+        });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        if (data.payment_status === 'paid') {
+          setPaymentData(data);
+        } else {
+          toast({
+            title: "Проблема с оплатой",
+            description: "Статус оплаты: " + data.payment_status,
+            variant: "destructive",
+          });
+          navigate("/checkout");
+        }
+      } catch (error) {
+        console.error('Payment verification error:', error);
+        toast({
+          title: "Ошибка проверки оплаты",
+          description: "Свяжитесь с поддержкой",
+          variant: "destructive",
+        });
+        navigate("/");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    verifyPayment();
+  }, [sessionId, navigate, toast]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-16 flex justify-center">
+          <div className="flex items-center gap-2">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <span>Проверяем оплату...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!paymentData) {
     return null;
   }
 
-  const formatPrice = (price: number) => `${price.toFixed(2)}€`;
+  const formatPrice = (amountCents: number) => `${(amountCents / 100).toFixed(2)}€`;
   const orderNumber = Math.random().toString(36).substr(2, 9).toUpperCase();
 
   return (
@@ -60,7 +112,7 @@ const OrderSuccess = () => {
                 <div>
                   <p className="font-medium">Адрес доставки:</p>
                   <p className="text-muted-foreground">
-                    {orderData.address}, {orderData.city}, {orderData.postalCode}
+                    {paymentData.customer_details?.address?.line1 || paymentData.metadata?.address}
                   </p>
                 </div>
               </div>
@@ -70,9 +122,11 @@ const OrderSuccess = () => {
                 <div>
                   <p className="font-medium">Контакт:</p>
                   <p className="text-muted-foreground">
-                    {orderData.firstName} {orderData.lastName}
+                    {paymentData.customer_details?.name || paymentData.metadata?.customerName}
                   </p>
-                  <p className="text-muted-foreground">{orderData.phone}</p>
+                  <p className="text-muted-foreground">
+                    {paymentData.customer_details?.phone || paymentData.metadata?.phone}
+                  </p>
                 </div>
               </div>
 
@@ -85,28 +139,20 @@ const OrderSuccess = () => {
               </div>
             </div>
 
-            {/* Order Items */}
+            {/* Order Total */}
             <div className="border-t pt-6">
-              <h3 className="font-medium mb-4">Состав заказа:</h3>
-              <div className="space-y-3">
-                {items.map((item: any) => (
-                  <div key={item.id} className="flex justify-between items-center">
-                    <div>
-                      <span className="font-medium">{item.name}</span>
-                      <span className="text-muted-foreground ml-2">x{item.quantity}</span>
-                      {item.restaurantName && (
-                        <p className="text-xs text-muted-foreground">{item.restaurantName}</p>
-                      )}
-                    </div>
-                    <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
-                  </div>
-                ))}
+              <div className="flex justify-between items-center text-lg font-semibold">
+                <span>Оплачено:</span>
+                <span>{formatPrice(paymentData.amount_total)}</span>
               </div>
-
-              <div className="flex justify-between items-center pt-4 mt-4 border-t text-lg font-semibold">
-                <span>Итого:</span>
-                <span>{formatPrice(total)}</span>
-              </div>
+              
+              {paymentData.metadata?.notes && (
+                <div className="mt-4 p-3 bg-muted/30 rounded-lg">
+                  <p className="text-sm">
+                    <strong>Комментарий:</strong> {paymentData.metadata.notes}
+                  </p>
+                </div>
+              )}
             </div>
           </Card>
 

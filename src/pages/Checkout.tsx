@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, CreditCard, MapPin, Clock } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -70,30 +71,34 @@ const Checkout = () => {
     setIsProcessing(true);
 
     try {
-      // Here we would integrate with Stripe
-      // For now, simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Clear cart and redirect to success
-      await clearCart();
-      
-      toast({
-        title: "Заказ оформлен!",
-        description: "Ваш заказ принят в обработку. Ожидайте доставку в течение 30 минут.",
-      });
-
-      navigate("/order-success", { 
-        state: { 
+      // Call Stripe payment function
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
           orderData: formData,
           items: items,
           total: total
         }
       });
 
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data?.url) {
+        // Clear cart before redirecting to payment
+        await clearCart();
+        
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        throw new Error('Не удалось создать сессию оплаты');
+      }
+
     } catch (error) {
+      console.error('Payment error:', error);
       toast({
         title: "Ошибка оплаты",
-        description: "Попробуйте еще раз или свяжитесь с поддержкой",
+        description: error instanceof Error ? error.message : "Попробуйте еще раз или свяжитесь с поддержкой",
         variant: "destructive",
       });
     } finally {
