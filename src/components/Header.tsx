@@ -1,7 +1,8 @@
-import { Search, MapPin, User, ShoppingBag } from "lucide-react";
+import { Search, MapPin, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
+import CartSheet from "@/components/CartSheet";
 
 const Header = () => {
   const location = useLocation();
@@ -64,12 +65,7 @@ const Header = () => {
             <Button variant="ghost" size="icon">
               <User className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingBag className="w-5 h-5" />
-              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                2
-              </span>
-            </Button>
+            <CartSheet />
           </div>
         </div>
       </div>

@@ -288,7 +288,12 @@ const Restaurant = () => {
               <h2 className="text-2xl font-bold mb-6">{currentCategory.name}</h2>
               <div className="space-y-4">
                 {currentCategory.items.map((item) => (
-                  <MenuItem key={item.id} {...item} />
+                  <MenuItem 
+                    key={item.id} 
+                    {...item} 
+                    restaurantId={restaurant.id}
+                    restaurantName={restaurant.name}
+                  />
                 ))}
               </div>
             </>

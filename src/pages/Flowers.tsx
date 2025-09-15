@@ -151,7 +151,7 @@ const Flowers = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredFlowers.map((flower) => (
-              <ProductCard key={flower.id} {...flower} />
+              <ProductCard key={flower.id} {...flower} category="flowers" />
             ))}
           </div>
         </div>

@@ -151,7 +151,7 @@ const Balloons = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredBalloons.map((balloon) => (
-              <ProductCard key={balloon.id} {...balloon} />
+              <ProductCard key={balloon.id} {...balloon} category="balloons" />
             ))}
           </div>
         </div>

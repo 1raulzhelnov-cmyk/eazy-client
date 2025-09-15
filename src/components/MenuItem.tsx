@@ -2,7 +2,7 @@ import { Plus, Minus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useCart } from "@/contexts/CartContext";
 
 interface MenuItemProps {
   id: string;
@@ -14,9 +14,12 @@ interface MenuItemProps {
   ingredients?: string[];
   weight?: string;
   popular?: boolean;
+  restaurantId?: string;
+  restaurantName?: string;
 }
 
 const MenuItem = ({ 
+  id,
   name, 
   image, 
   price,
@@ -24,16 +27,27 @@ const MenuItem = ({
   tags,
   ingredients,
   weight,
-  popular = false
+  popular = false,
+  restaurantId,
+  restaurantName
 }: MenuItemProps) => {
-  const [quantity, setQuantity] = useState(0);
+  const { addItem, updateQuantity, getItemQuantity } = useCart();
+  const quantity = getItemQuantity(id);
 
-  const addToCart = () => {
-    setQuantity(prev => prev + 1);
+  const handleAddToCart = () => {
+    addItem({
+      id,
+      name,
+      image,
+      price,
+      restaurantId,
+      restaurantName,
+      category: 'food'
+    });
   };
 
-  const removeFromCart = () => {
-    setQuantity(prev => Math.max(0, prev - 1));
+  const handleUpdateQuantity = (newQuantity: number) => {
+    updateQuantity(id, newQuantity);
   };
 
   return (
@@ -96,7 +110,7 @@ const MenuItem = ({
             {quantity === 0 ? (
               <Button 
                 size="sm" 
-                onClick={addToCart}
+                onClick={handleAddToCart}
                 className="bg-gradient-primary hover:shadow-glow transition-all"
               >
                 <Plus className="w-4 h-4 mr-1" />
@@ -107,14 +121,14 @@ const MenuItem = ({
                 <Button 
                   size="sm" 
                   variant="outline"
-                  onClick={removeFromCart}
+                  onClick={() => handleUpdateQuantity(quantity - 1)}
                 >
                   <Minus className="w-4 h-4" />
                 </Button>
                 <span className="text-lg font-semibold min-w-[2rem] text-center">{quantity}</span>
                 <Button 
                   size="sm" 
-                  onClick={addToCart}
+                  onClick={() => handleUpdateQuantity(quantity + 1)}
                   className="bg-gradient-primary hover:shadow-glow"
                 >
                   <Plus className="w-4 h-4" />

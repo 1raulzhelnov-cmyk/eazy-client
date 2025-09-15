@@ -1,7 +1,8 @@
-import { Plus, Heart } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/contexts/CartContext";
 
 interface ProductCardProps {
   id: string;
@@ -12,17 +13,34 @@ interface ProductCardProps {
   description?: string;
   tags?: string[];
   inStock?: boolean;
+  category: 'flowers' | 'balloons' | 'gifts';
 }
 
 const ProductCard = ({ 
+  id,
   name, 
   image, 
   price,
   originalPrice,
   description,
   tags,
-  inStock = true
+  inStock = true,
+  category
 }: ProductCardProps) => {
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    if (!inStock) return;
+    
+    addItem({
+      id,
+      name,
+      image,
+      price,
+      category
+    });
+  };
+
   return (
     <Card className="group cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02]">
       {/* Image */}
@@ -32,11 +50,6 @@ const ProductCard = ({
           alt={name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
-        <div className="absolute top-3 right-3 flex gap-2">
-          <Button variant="ghost" size="icon" className="bg-white/80 hover:bg-white">
-            <Heart className="w-4 h-4" />
-          </Button>
-        </div>
         {originalPrice && (
           <div className="absolute top-3 left-3">
             <Badge className="bg-accent text-accent-foreground">
@@ -84,6 +97,7 @@ const ProductCard = ({
           <Button 
             size="sm" 
             disabled={!inStock}
+            onClick={handleAddToCart}
             className="bg-gradient-primary hover:shadow-glow transition-all"
           >
             <Plus className="w-4 h-4 mr-1" />
