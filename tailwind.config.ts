@@ -49,10 +49,11 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         food: {
-          orange: "hsl(var(--food-orange))",
-          green: "hsl(var(--food-green))",
-          red: "hsl(var(--food-red))",
-          yellow: "hsl(var(--food-yellow))",
+          pink: "hsl(var(--pink-primary))",
+          secondary: "hsl(var(--pink-secondary))",
+          accent: "hsl(var(--pink-accent))",
+          light: "hsl(var(--pink-light))",
+          yellow: "hsl(var(--star-yellow))",
         },
       },
       backgroundImage: {

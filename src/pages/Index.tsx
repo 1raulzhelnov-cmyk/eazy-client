@@ -23,7 +23,7 @@ const restaurants = [
     cuisine: "Японская кухня",
     rating: 4.7,
     deliveryTime: "30-40 мин",
-    deliveryFee: 199,
+    deliveryFee: 2.5,
     tags: ["Суши", "Роллы", "Свежее"],
     category: "sushi"
   },
@@ -45,7 +45,7 @@ const restaurants = [
     cuisine: "Кофе и десерты",
     rating: 4.9,
     deliveryTime: "15-25 мин", 
-    deliveryFee: 150,
+    deliveryFee: 1.8,
     tags: ["Кофе", "Десерты", "Завтраки"],
     category: "coffee"
   },
@@ -56,7 +56,7 @@ const restaurants = [
     cuisine: "Азиатская кухня",
     rating: 4.5,
     deliveryTime: "35-45 мин",
-    deliveryFee: 250,
+    deliveryFee: 3.2,
     tags: ["Лапша", "Димсамы", "Острое"],
     category: "asian"
   },
@@ -88,11 +88,11 @@ const Index = () => {
       <section className="bg-gradient-hero text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Доставка еды за 
+            Доставка еды в Нарву за 
             <span className="text-primary-glow"> 30 минут</span>
           </h1>
           <p className="text-xl mb-8 opacity-90">
-            Лучшие рестораны города привозят вкусную еду прямо к вашей двери
+            Лучшие рестораны Нарвы привозят вкусную еду прямо к вашей двери
           </p>
         </div>
       </section>

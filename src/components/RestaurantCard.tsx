@@ -76,7 +76,7 @@ const RestaurantCard = ({
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Truck className="w-4 h-4" />
-            {deliveryFee === 0 ? "Бесплатно" : `${deliveryFee} ₽`}
+            {deliveryFee === 0 ? "Бесплатно" : `${deliveryFee}€`}
           </div>
           <span>{deliveryTime}</span>
         </div>
