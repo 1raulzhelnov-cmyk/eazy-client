@@ -1,14 +1,16 @@
 import { Badge } from "@/components/ui/badge";
 
 const categories = [
-  { id: "all", name: "Все", icon: "🍽️" },
+  { id: "all", name: "Все", icon: "🛍️" },
+  { id: "food", name: "Еда", icon: "🍽️" },
   { id: "pizza", name: "Пицца", icon: "🍕" },
   { id: "sushi", name: "Суши", icon: "🍣" },
   { id: "burger", name: "Бургеры", icon: "🍔" },
   { id: "coffee", name: "Кофе", icon: "☕" },
+  { id: "flowers", name: "Цветы", icon: "🌸" },
+  { id: "balloons", name: "Шары", icon: "🎈" },
+  { id: "gifts", name: "Подарки", icon: "🎁" },
   { id: "dessert", name: "Десерты", icon: "🧁" },
-  { id: "healthy", name: "Здоровое", icon: "🥗" },
-  { id: "asian", name: "Азиатская", icon: "🥢" },
 ];
 
 interface CategoryFilterProps {

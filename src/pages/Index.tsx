@@ -3,8 +3,9 @@ import Header from "@/components/Header";
 import CategoryFilter from "@/components/CategoryFilter";
 import RestaurantCard from "@/components/RestaurantCard";
 
-// Mock data for restaurants
-const restaurants = [
+// Mock data for stores (restaurants, flowers, balloons, etc.)
+const stores = [
+  // Food stores
   {
     id: "1",
     name: "Piccola Italia",
@@ -23,7 +24,7 @@ const restaurants = [
     cuisine: "Японская кухня",
     rating: 4.7,
     deliveryTime: "30-40 мин",
-    deliveryFee: 2.5,
+    deliveryFee: 0,
     tags: ["Суши", "Роллы", "Свежее"],
     category: "sushi"
   },
@@ -45,40 +46,81 @@ const restaurants = [
     cuisine: "Кофе и десерты",
     rating: 4.9,
     deliveryTime: "15-25 мин", 
-    deliveryFee: 1.8,
+    deliveryFee: 0,
     tags: ["Кофе", "Десерты", "Завтраки"],
     category: "coffee"
   },
+  
+  // Flower shops
   {
     id: "5",
-    name: "Азиатский Дворик",
-    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&h=400&fit=crop&crop=faces",
-    cuisine: "Азиатская кухня",
-    rating: 4.5,
-    deliveryTime: "35-45 мин",
-    deliveryFee: 3.2,
-    tags: ["Лапша", "Димсамы", "Острое"],
-    category: "asian"
+    name: "Розовый Сад",
+    image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600&h=400&fit=crop&crop=faces",
+    cuisine: "Цветочный магазин",
+    rating: 4.9,
+    deliveryTime: "45-60 мин",
+    deliveryFee: 0,
+    tags: ["Розы", "Букеты", "Свадебные"],
+    category: "flowers"
   },
   {
     id: "6",
-    name: "Салатная Лавка",
-    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=400&fit=crop&crop=faces",
-    cuisine: "Здоровая еда",
+    name: "Нарвские Тюльпаны",
+    image: "https://images.unsplash.com/photo-1487070183336-b863922373d4?w=600&h=400&fit=crop&crop=faces",
+    cuisine: "Цветы и растения",
+    rating: 4.8,
+    deliveryTime: "30-45 мин",
+    deliveryFee: 0,
+    tags: ["Тюльпаны", "Комнатные", "Сезонные"],
+    category: "flowers"
+  },
+  
+  // Balloon shops
+  {
+    id: "7",
+    name: "Party Time",
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&h=400&fit=crop&crop=faces",
+    cuisine: "Праздничные шары",
     rating: 4.7,
     deliveryTime: "20-30 мин",
     deliveryFee: 0,
-    tags: ["Салаты", "Смузи", "Веган"],
-    category: "healthy"
+    tags: ["День рождения", "Гелиевые", "Фольгированные"],
+    category: "balloons"
   },
+  {
+    id: "8",
+    name: "Balloon Magic",
+    image: "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=600&h=400&fit=crop&crop=faces",
+    cuisine: "Шары и декор",
+    rating: 4.6,
+    deliveryTime: "15-25 мин",
+    deliveryFee: 0,
+    tags: ["Свадебные", "Корпоративные", "Детские"],
+    category: "balloons"
+  },
+
+  // Gift shops
+  {
+    id: "9",
+    name: "Подарочная Лавка",
+    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&h=400&fit=crop&crop=faces",
+    cuisine: "Подарки и сувениры",
+    rating: 4.8,
+    deliveryTime: "40-60 мин",
+    deliveryFee: 0,
+    tags: ["Сувениры", "Handmade", "Эксклюзив"],
+    category: "gifts"
+  }
 ];
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const filteredRestaurants = selectedCategory === "all" 
-    ? restaurants 
-    : restaurants.filter(restaurant => restaurant.category === selectedCategory);
+  const filteredStores = selectedCategory === "all" 
+    ? stores 
+    : selectedCategory === "food" 
+    ? stores.filter(store => ["pizza", "sushi", "burger", "coffee", "dessert"].includes(store.category))
+    : stores.filter(store => store.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,11 +130,11 @@ const Index = () => {
       <section className="bg-gradient-hero text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Доставка еды в Нарву за 
+            Доставка всего в Нарву за 
             <span className="text-primary-glow"> 30 минут</span>
           </h1>
           <p className="text-xl mb-8 opacity-90">
-            Лучшие рестораны Нарвы привозят вкусную еду прямо к вашей двери
+            Еда, цветы, шары и подарки — всё с бесплатной доставкой прямо к вашей двери
           </p>
         </div>
       </section>
@@ -107,21 +149,26 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Restaurants Grid */}
+      {/* Stores Grid */}
       <section className="pb-16">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">
-              {selectedCategory === "all" ? "Все рестораны" : "Найдено ресторанов"}
+              {selectedCategory === "all" ? "Все магазины" : 
+               selectedCategory === "food" ? "Рестораны" :
+               selectedCategory === "flowers" ? "Цветочные магазины" :
+               selectedCategory === "balloons" ? "Магазины шаров" :
+               selectedCategory === "gifts" ? "Подарочные магазины" :
+               "Найденные магазины"}
             </h2>
             <span className="text-muted-foreground">
-              {filteredRestaurants.length} {selectedCategory === "all" ? "ресторанов" : "результатов"}
+              {filteredStores.length} {selectedCategory === "all" ? "магазинов" : "результатов"}
             </span>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredRestaurants.map((restaurant) => (
-              <RestaurantCard key={restaurant.id} {...restaurant} />
+            {filteredStores.map((store) => (
+              <RestaurantCard key={store.id} {...store} />
             ))}
           </div>
         </div>

@@ -13,7 +13,7 @@ const Header = () => {
               <span className="text-white font-bold text-xl">💕</span>
             </div>
             <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Изи
+              Easy
             </h1>
           </div>
 
@@ -27,7 +27,7 @@ const Header = () => {
           <div className="flex-1 max-w-md relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
-              placeholder="Найти ресторан или блюдо..."
+              placeholder="Найти рестораны, цветы, шары..."
               className="pl-10 bg-muted/50"
             />
           </div>
