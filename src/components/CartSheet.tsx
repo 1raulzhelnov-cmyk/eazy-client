@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/contexts/CartContext";
+import { Link } from "react-router-dom";
 
 const CartSheet = () => {
   const { items, total, itemCount, updateQuantity, removeItem, clearCart } = useCart();
@@ -112,9 +113,11 @@ const CartSheet = () => {
               </div>
               
               <div className="space-y-2">
-                <Button className="w-full bg-gradient-primary hover:shadow-glow" size="lg">
-                  Оформить заказ
-                </Button>
+                <Link to="/checkout">
+                  <Button className="w-full bg-gradient-primary hover:shadow-glow" size="lg">
+                    Оформить заказ
+                  </Button>
+                </Link>
                 <Button variant="outline" onClick={clearCart} className="w-full">
                   Очистить корзину
                 </Button>
