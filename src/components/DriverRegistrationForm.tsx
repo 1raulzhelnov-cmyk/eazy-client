@@ -51,16 +51,21 @@ const DriverRegistrationForm = () => {
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}/${docType}_${Date.now()}.${fileExt}`;
 
+      // Log the document upload for security audit
+      await supabase.rpc('audit_data_access', {
+        action_name: 'upload_driver_document',
+        resource_name: 'driver_documents',
+        resource_identifier: fileName,
+        additional_details: { document_type: docType, file_size: file.size }
+      });
+
       const { error: uploadError } = await supabase.storage
-        .from('driver-documents')
+        .from('driver-documents-secure')
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('driver-documents')
-        .getPublicUrl(fileName);
-
+      // No longer getting public URL for security - store only the path
       setDocuments(prev => ({
         ...prev,
         [docType]: {

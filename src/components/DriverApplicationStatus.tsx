@@ -32,15 +32,25 @@ const DriverApplicationStatus = () => {
 
   const fetchApplicationStatus = async () => {
     try {
+      setLoading(true);
+
+      // Log access to driver application data
+      await supabase.rpc('audit_data_access', {
+        action_name: 'view_driver_application',
+        resource_name: 'driver_applications',
+        resource_identifier: user?.id || '',
+        additional_details: { access_type: 'status_check' }
+      });
+
       const { data, error } = await supabase
         .from('driver_applications')
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
         console.error('Error fetching application:', error);
         return;
       }
