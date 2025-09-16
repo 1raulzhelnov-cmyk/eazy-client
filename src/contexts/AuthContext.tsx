@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 
 interface Profile {
   id: string;
@@ -45,7 +44,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
 
   // Fetch user profile
   const fetchProfile = async (userId: string) => {
@@ -178,11 +176,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(null);
       setSession(null);
       setProfile(null);
-      
-      toast({
-        title: "Вы вышли из аккаунта",
-        description: "До свидания!",
-      });
     } catch (error) {
       console.error('Error signing out:', error);
     } finally {
@@ -206,12 +199,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       setProfile(data);
-      
-      toast({
-        title: "Профиль обновлен",
-        description: "Ваши данные успешно сохранены",
-      });
-
       return { error: null };
     } catch (error) {
       return { error };

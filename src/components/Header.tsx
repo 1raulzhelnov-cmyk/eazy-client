@@ -86,7 +86,7 @@ const Header = () => {
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-1 leading-none">
                       {profile && (
@@ -101,19 +101,19 @@ const Header = () => {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/profile">Профиль</Link>
+                    <Link to="/profile" className="cursor-pointer">Профиль</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/orders">Мои заказы</Link>
+                    <Link to="/orders" className="cursor-pointer">Мои заказы</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/favorites">Избранное</Link>
+                    <Link to="/favorites" className="cursor-pointer">Избранное</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/addresses">Адреса</Link>
+                    <Link to="/addresses" className="cursor-pointer">Адреса</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                  <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
                     Выйти
                   </DropdownMenuItem>
                 </DropdownMenuContent>
