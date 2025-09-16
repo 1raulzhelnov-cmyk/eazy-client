@@ -101,6 +101,117 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_applications: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          driver_license_photo: string | null
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          license_plate: string | null
+          passport_photo: string | null
+          phone: string
+          status: string
+          updated_at: string
+          user_id: string
+          vehicle_registration_photo: string | null
+          vehicle_type: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          driver_license_photo?: string | null
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          license_plate?: string | null
+          passport_photo?: string | null
+          phone: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          vehicle_registration_photo?: string | null
+          vehicle_type: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          driver_license_photo?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          license_plate?: string | null
+          passport_photo?: string | null
+          phone?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          vehicle_registration_photo?: string | null
+          vehicle_type?: string
+        }
+        Relationships: []
+      }
+      drivers: {
+        Row: {
+          created_at: string
+          current_location: Json | null
+          email: string
+          first_name: string
+          id: string
+          is_active: boolean
+          is_verified: boolean
+          last_name: string
+          license_plate: string | null
+          phone: string
+          rating: number | null
+          status: string
+          total_deliveries: number | null
+          updated_at: string
+          user_id: string
+          vehicle_type: string
+        }
+        Insert: {
+          created_at?: string
+          current_location?: Json | null
+          email: string
+          first_name: string
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          last_name: string
+          license_plate?: string | null
+          phone: string
+          rating?: number | null
+          status?: string
+          total_deliveries?: number | null
+          updated_at?: string
+          user_id: string
+          vehicle_type?: string
+        }
+        Update: {
+          created_at?: string
+          current_location?: Json | null
+          email?: string
+          first_name?: string
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          last_name?: string
+          license_plate?: string | null
+          phone?: string
+          rating?: number | null
+          status?: string
+          total_deliveries?: number | null
+          updated_at?: string
+          user_id?: string
+          vehicle_type?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           category: string | null
@@ -313,12 +424,15 @@ export type Database = {
           customer_info: Json
           delivered_at: string | null
           delivery_address: Json
+          delivery_started_at: string | null
+          driver_id: string | null
           estimated_delivery_time: string | null
           id: string
           items: Json
           order_number: string
           payment_method: string
           payment_status: string
+          pickup_time: string | null
           special_instructions: string | null
           status: string
           stripe_session_id: string | null
@@ -331,12 +445,15 @@ export type Database = {
           customer_info: Json
           delivered_at?: string | null
           delivery_address: Json
+          delivery_started_at?: string | null
+          driver_id?: string | null
           estimated_delivery_time?: string | null
           id?: string
           items: Json
           order_number: string
           payment_method?: string
           payment_status?: string
+          pickup_time?: string | null
           special_instructions?: string | null
           status?: string
           stripe_session_id?: string | null
@@ -349,12 +466,15 @@ export type Database = {
           customer_info?: Json
           delivered_at?: string | null
           delivery_address?: Json
+          delivery_started_at?: string | null
+          driver_id?: string | null
           estimated_delivery_time?: string | null
           id?: string
           items?: Json
           order_number?: string
           payment_method?: string
           payment_status?: string
+          pickup_time?: string | null
           special_instructions?: string | null
           status?: string
           stripe_session_id?: string | null
@@ -362,7 +482,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
