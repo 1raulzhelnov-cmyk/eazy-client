@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Star, Camera, X } from "lucide-react";
+import { Star, Camera, X, Upload } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,7 +31,40 @@ const WriteReview = ({
   const [hoveredRating, setHoveredRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
+  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+
+  const uploadPhoto = async (file: File): Promise<string | null> => {
+    if (!user) return null;
+    
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('review-photos')
+        .upload(fileName, file);
+
+      if (error) {
+        throw error;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('review-photos')
+        .getPublicUrl(data.path);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      toast({
+        title: "Ошибка загрузки",
+        description: "Не удалось загрузить фотографию",
+        variant: "destructive",
+      });
+      return null;
+    }
+  };
 
   const handleSubmitReview = async () => {
     if (!user) {
@@ -69,7 +102,7 @@ const WriteReview = ({
         restaurant_id: restaurantId,
         rating,
         review_text: reviewText.trim(),
-        photos: photos.length > 0 ? photos : null,
+        photos: uploadedPhotos.length > 0 ? uploadedPhotos : null,
         ...(orderId && { order_id: orderId }),
       };
 
@@ -90,6 +123,7 @@ const WriteReview = ({
       setRating(0);
       setReviewText("");
       setPhotos([]);
+      setUploadedPhotos([]);
       setIsOpen(false);
 
       // Callback for parent component
@@ -107,12 +141,25 @@ const WriteReview = ({
     }
   };
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files) {
-      // In a real app, you would upload these to a storage service
-      // For now, we'll create temporary URLs
-      Array.from(files).forEach(file => {
+    if (!files || files.length === 0) return;
+
+    setIsUploadingPhoto(true);
+
+    try {
+      for (const file of Array.from(files)) {
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+          toast({
+            title: "Файл слишком большой",
+            description: "Размер фото не должен превышать 5 МБ",
+            variant: "destructive",
+          });
+          continue;
+        }
+
+        // Create preview
         const reader = new FileReader();
         reader.onload = (e) => {
           if (e.target?.result) {
@@ -120,12 +167,23 @@ const WriteReview = ({
           }
         };
         reader.readAsDataURL(file);
-      });
+
+        // Upload to storage
+        const publicUrl = await uploadPhoto(file);
+        if (publicUrl) {
+          setUploadedPhotos(prev => [...prev, publicUrl]);
+        }
+      }
+    } catch (error) {
+      console.error('Error processing photos:', error);
+    } finally {
+      setIsUploadingPhoto(false);
     }
   };
 
   const removePhoto = (index: number) => {
     setPhotos(prev => prev.filter((_, i) => i !== index));
+    setUploadedPhotos(prev => prev.filter((_, i) => i !== index));
   };
 
   if (!user) {
@@ -214,6 +272,7 @@ const WriteReview = ({
               onChange={(e) => setReviewText(e.target.value)}
               rows={4}
               className="resize-none"
+              maxLength={500}
             />
             <div className="text-xs text-muted-foreground mt-1">
               {reviewText.length}/500 символов
@@ -256,13 +315,27 @@ const WriteReview = ({
                     onChange={handlePhotoUpload}
                     className="hidden"
                     id="photo-upload"
+                    disabled={isUploadingPhoto}
                   />
                   <Label
                     htmlFor="photo-upload"
-                    className="flex items-center gap-2 cursor-pointer border-2 border-dashed border-muted rounded-lg p-4 hover:border-primary transition-colors"
+                    className={`flex items-center gap-2 cursor-pointer border-2 border-dashed rounded-lg p-4 transition-colors ${
+                      isUploadingPhoto 
+                        ? 'border-muted bg-muted cursor-not-allowed' 
+                        : 'border-muted hover:border-primary'
+                    }`}
                   >
-                    <Camera className="w-5 h-5" />
-                    <span className="text-sm">Добавить фото</span>
+                    {isUploadingPhoto ? (
+                      <>
+                        <Upload className="w-5 h-5 animate-pulse" />
+                        <span className="text-sm">Загрузка...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="w-5 h-5" />
+                        <span className="text-sm">Добавить фото</span>
+                      </>
+                    )}
                   </Label>
                   <p className="text-xs text-muted-foreground mt-1">
                     Максимум 5 фотографий, до 5 МБ каждая
@@ -276,7 +349,7 @@ const WriteReview = ({
           <div className="flex gap-3">
             <Button
               onClick={handleSubmitReview}
-              disabled={isSubmitting || rating === 0}
+              disabled={isSubmitting || rating === 0 || isUploadingPhoto}
               className="flex-1 bg-gradient-primary hover:shadow-glow"
             >
               {isSubmitting ? "Публикуем..." : "Опубликовать отзыв"}
@@ -284,6 +357,7 @@ const WriteReview = ({
             <Button
               variant="outline"
               onClick={() => setIsOpen(false)}
+              disabled={isSubmitting}
             >
               Отмена
             </Button>

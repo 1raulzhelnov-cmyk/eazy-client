@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, ThumbsUp, ThumbsDown, Flag, MoreHorizontal } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import PhotoLightbox from "@/components/PhotoLightbox";
 
 interface ReviewCardProps {
   id: string;
@@ -39,6 +40,8 @@ const ReviewCard = ({
   const [userVote, setUserVote] = useState<'helpful' | 'not_helpful' | null>(null);
   const [helpfulCount, setHelpfulCount] = useState(helpful);
   const [notHelpfulCount, setNotHelpfulCount] = useState(notHelpful);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('ru-RU', {
@@ -46,6 +49,11 @@ const ReviewCard = ({
       month: 'long',
       year: 'numeric'
     });
+  };
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
   };
 
   const handleVote = (vote: 'helpful' | 'not_helpful') => {
@@ -182,10 +190,7 @@ const ReviewCard = ({
                     src={photo}
                     alt={`Фото к отзыву ${index + 1}`}
                     className="w-20 h-20 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
-                    onClick={() => {
-                      // Open photo in modal/lightbox
-                      console.log('Open photo:', photo);
-                    }}
+                    onClick={() => openLightbox(index)}
                   />
                 ))}
               </div>
@@ -235,6 +240,14 @@ const ReviewCard = ({
           </div>
         </div>
       </div>
+
+      {/* Photo Lightbox */}
+      <PhotoLightbox
+        photos={photos}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </Card>
   );
 };

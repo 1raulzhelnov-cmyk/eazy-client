@@ -3,8 +3,10 @@ import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import MenuItem from "@/components/MenuItem";
 import Map from "@/components/Map";
+import RestaurantReviews from "@/components/RestaurantReviews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Clock, Star, Truck } from "lucide-react";
 
 // Mock restaurant data
@@ -299,67 +301,83 @@ const Restaurant = () => {
         </div>
       </section>
 
-      {/* Menu Categories */}
-      <section className="py-6 sticky top-[72px] bg-background/95 backdrop-blur-md border-b z-40">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {menu.categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`whitespace-nowrap px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
-                  selectedCategory === category.id 
-                    ? "bg-gradient-primary text-white shadow-glow" 
-                    : "bg-secondary text-secondary-foreground hover:bg-muted"
-                }`}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Menu Items */}
+      {/* Content Tabs */}
       <section className="pb-16">
         <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              {currentCategory && (
-                <>
-                  <h2 className="text-2xl font-bold mb-6">{currentCategory.name}</h2>
-                  <div className="space-y-4">
-                    {currentCategory.items.map((item) => (
-                      <MenuItem 
-                        key={item.id} 
-                        {...item} 
-                        restaurantId={restaurant.id}
-                        restaurantName={restaurant.name}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
+          <Tabs defaultValue="menu" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="menu">Меню</TabsTrigger>
+              <TabsTrigger value="reviews">Отзывы</TabsTrigger>
+            </TabsList>
 
-            <div className="space-y-6">
-              {/* Location Map */}
-              <div>
-                <h3 className="text-xl font-bold mb-4">Местоположение</h3>
-                <Map 
-                  restaurants={[{
-                    id: restaurant.id,
-                    name: restaurant.name,
-                    address: restaurant.address,
-                    lat: 55.7558,
-                    lng: 37.6173,
-                    rating: restaurant.rating
-                  }]}
-                  height="250px"
-                />
+            {/* Menu Tab */}
+            <TabsContent value="menu" className="mt-6">
+              {/* Menu Categories */}
+              <div className="sticky top-[72px] bg-background/95 backdrop-blur-md border-b z-40 -mx-4 px-4 py-4 mb-6">
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {menu.categories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`whitespace-nowrap px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
+                        selectedCategory === category.id 
+                          ? "bg-gradient-primary text-white shadow-glow" 
+                          : "bg-secondary text-secondary-foreground hover:bg-muted"
+                      }`}
+                    >
+                      {category.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                  {currentCategory && (
+                    <>
+                      <h2 className="text-2xl font-bold mb-6">{currentCategory.name}</h2>
+                      <div className="space-y-4">
+                        {currentCategory.items.map((item) => (
+                          <MenuItem 
+                            key={item.id} 
+                            {...item} 
+                            restaurantId={restaurant.id}
+                            restaurantName={restaurant.name}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className="space-y-6">
+                  {/* Location Map */}
+                  <div>
+                    <h3 className="text-xl font-bold mb-4">Местоположение</h3>
+                    <Map 
+                      restaurants={[{
+                        id: restaurant.id,
+                        name: restaurant.name,
+                        address: restaurant.address,
+                        lat: 55.7558,
+                        lng: 37.6173,
+                        rating: restaurant.rating
+                      }]}
+                      height="250px"
+                    />
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Reviews Tab */}
+            <TabsContent value="reviews" className="mt-6">
+              <RestaurantReviews
+                restaurantId={restaurant.id}
+                restaurantName={restaurant.name}
+              />
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
     </div>
