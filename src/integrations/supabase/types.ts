@@ -92,6 +92,78 @@ export type Database = {
         }
         Relationships: []
       }
+      loyalty_program: {
+        Row: {
+          created_at: string
+          id: string
+          points: number
+          tier: string
+          total_orders: number
+          total_spent: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          points?: number
+          tier?: string
+          total_orders?: number
+          total_spent?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          points?: number
+          tier?: string
+          total_orders?: number
+          total_spent?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          id: string
+          message: string
+          order_id: string | null
+          read: boolean
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          order_id?: string | null
+          read?: boolean
+          read_at?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          order_id?: string | null
+          read?: boolean
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           created_at: string
@@ -182,6 +254,42 @@ export type Database = {
         }
         Relationships: []
       }
+      recommendations: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          item_id: string
+          metadata: Json | null
+          reasoning: string | null
+          recommendation_type: string
+          relevance_score: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          item_id: string
+          metadata?: Json | null
+          reasoning?: string | null
+          recommendation_type: string
+          relevance_score: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          item_id?: string
+          metadata?: Json | null
+          reasoning?: string | null
+          recommendation_type?: string
+          relevance_score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       reviews: {
         Row: {
           created_at: string
@@ -225,6 +333,75 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_analytics: {
+        Row: {
+          created_at: string
+          event_data: Json
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          dietary_restrictions: string[] | null
+          favorite_cuisines: string[] | null
+          id: string
+          notification_settings: Json
+          preferences: Json
+          privacy_settings: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dietary_restrictions?: string[] | null
+          favorite_cuisines?: string[] | null
+          id?: string
+          notification_settings?: Json
+          preferences?: Json
+          privacy_settings?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dietary_restrictions?: string[] | null
+          favorite_cuisines?: string[] | null
+          id?: string
+          notification_settings?: Json
+          preferences?: Json
+          privacy_settings?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
