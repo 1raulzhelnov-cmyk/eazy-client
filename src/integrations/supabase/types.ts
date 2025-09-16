@@ -660,7 +660,6 @@ export type Database = {
           anonymous_user_id: string | null
           created_at: string | null
           id: string | null
-          order_id: string | null
           photos: string[] | null
           rating: number | null
           restaurant_id: string | null
@@ -671,7 +670,6 @@ export type Database = {
           anonymous_user_id?: never
           created_at?: string | null
           id?: string | null
-          order_id?: never
           photos?: string[] | null
           rating?: number | null
           restaurant_id?: string | null
@@ -682,7 +680,6 @@ export type Database = {
           anonymous_user_id?: never
           created_at?: string | null
           id?: string | null
-          order_id?: never
           photos?: string[] | null
           rating?: number | null
           restaurant_id?: string | null
