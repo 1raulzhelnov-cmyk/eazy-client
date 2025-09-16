@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import FloatingSupportButton from "@/components/FloatingSupportButton";
 import Index from "./pages/Index";
 import Restaurants from "./pages/Restaurants";
 import Restaurant from "./pages/Restaurant";
@@ -13,6 +14,7 @@ import Balloons from "./pages/Balloons";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import OrderTracking from "./pages/OrderTracking";
+import Support from "./pages/Support";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
@@ -39,6 +41,7 @@ const App = () => (
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/order-tracking/:orderId" element={<OrderTracking />} />
+              <Route path="/support" element={<Support />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/orders" element={<Orders />} />
@@ -47,6 +50,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <FloatingSupportButton />
           </BrowserRouter>
         </CartProvider>
       </AuthProvider>
