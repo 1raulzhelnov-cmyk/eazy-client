@@ -31,7 +31,7 @@ export const RestaurantSupportCenter = () => {
   const [ticketData, setTicketData] = useState({
     subject: '',
     category: '',
-    priority: 'medium',
+    priority: 'medium' as 'high' | 'medium' | 'low',
     description: ''
   });
 
@@ -172,7 +172,7 @@ export const RestaurantSupportCenter = () => {
 
               <div className="grid gap-2">
                 <label className="text-sm font-medium">Приоритет</label>
-                <Select value={ticketData.priority} onValueChange={(value) => setTicketData(prev => ({ ...prev, priority: value }))}>
+                <Select value={ticketData.priority} onValueChange={(value: 'high' | 'medium' | 'low') => setTicketData(prev => ({ ...prev, priority: value }))}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
