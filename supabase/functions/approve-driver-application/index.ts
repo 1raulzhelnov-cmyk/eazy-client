@@ -35,6 +35,42 @@ serve(async (req) => {
       )
     }
 
+    // Create a service role client for admin operations
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
+
+    // Verify admin permissions
+    const { data: adminCheck, error: adminError } = await supabaseAdmin
+      .from('admin_roles')
+      .select('permissions')
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+      .single()
+
+    if (adminError || !adminCheck) {
+      return new Response(
+        JSON.stringify({ error: 'Admin access required' }),
+        { 
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    // Verify specific permission
+    const hasApprovalPermission = adminCheck.permissions?.approve_applications === true
+    if (!hasApprovalPermission) {
+      return new Response(
+        JSON.stringify({ error: 'Insufficient permissions to approve applications' }),
+        { 
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
     const { applicationId, approved, adminNotes } = await req.json()
 
     if (!applicationId) {
@@ -46,12 +82,6 @@ serve(async (req) => {
         }
       )
     }
-
-    // Create a service role client for admin operations
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
 
     // Get the application details
     const { data: application, error: fetchError } = await supabaseAdmin
