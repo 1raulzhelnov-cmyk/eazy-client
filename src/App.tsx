@@ -23,6 +23,7 @@ import Addresses from "./pages/Addresses";
 import Favorites from "./pages/Favorites";
 import Support from "./pages/Support";
 import Promotions from "./pages/Promotions";
+import DriverApp from "./pages/DriverApp";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/support" element={<Support />} />
               <Route path="/promotions" element={<Promotions />} />
+              <Route path="/driver" element={<DriverApp />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
