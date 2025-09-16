@@ -12,6 +12,9 @@ import DriverApplicationStatus from '@/components/DriverApplicationStatus';
 import DriverOrderNotifications from '@/components/DriverOrderNotifications';
 import DriverEarningsPanel from '@/components/DriverEarningsPanel';
 import DriverCommunication from '@/components/DriverCommunication';
+import AvailableOrdersPanel from '@/components/AvailableOrdersPanel';
+import DriverNavigation from '@/components/DriverNavigation';
+import LocationTracker from '@/components/LocationTracker';
 
 interface Driver {
   id: string;
@@ -45,6 +48,7 @@ const DriverApp = () => {
   const [driver, setDriver] = useState<Driver | null>(null);
   const [application, setApplication] = useState<any>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [currentNavigation, setCurrentNavigation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -158,8 +162,27 @@ const DriverApp = () => {
         updates.pickup_time = new Date().toISOString();
       } else if (newStatus === 'in_delivery') {
         updates.delivery_started_at = new Date().toISOString();
+        
+        // Найти заказ для навигации
+        const order = orders.find(o => o.id === orderId);
+        if (order) {
+          setCurrentNavigation({
+            destination: {
+              address: order.delivery_address.address_line_1,
+              lat: order.delivery_address.latitude,
+              lng: order.delivery_address.longitude
+            },
+            orderInfo: {
+              order_number: order.order_number,
+              customer_name: order.customer_info?.name,
+              customer_phone: order.customer_info?.phone,
+              type: 'delivery'
+            }
+          });
+        }
       } else if (newStatus === 'delivered') {
         updates.delivered_at = new Date().toISOString();
+        setCurrentNavigation(null);
       }
 
       const { error } = await supabase
@@ -184,6 +207,24 @@ const DriverApp = () => {
     } catch (error) {
       console.error('Error updating order status:', error);
     }
+  };
+
+  const handleOrderPickup = (order: Order) => {
+    setCurrentNavigation({
+      destination: {
+        address: order.items[0]?.restaurant_address || 'Ресторан',
+        lat: 59.3776,
+        lng: 28.1907
+      },
+      orderInfo: {
+        order_number: order.order_number,
+        type: 'pickup'
+      }
+    });
+  };
+
+  const handleArrivedAtLocation = () => {
+    setCurrentNavigation(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -287,6 +328,37 @@ const DriverApp = () => {
         </CardContent>
       </Card>
 
+      {/* Location Tracking */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Местоположение</h3>
+        <LocationTracker
+          driverStatus={driver.status}
+          onLocationUpdate={(position) => {
+            console.log('Location updated:', position);
+          }}
+        />
+      </div>
+
+      {/* Navigation */}
+      {currentNavigation && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Навигация</h3>
+          <DriverNavigation
+            destination={currentNavigation.destination}
+            orderInfo={currentNavigation.orderInfo}
+            onArrived={handleArrivedAtLocation}
+          />
+        </div>
+      )}
+
+      {/* Available Orders for Online Drivers */}
+      {driver && driver.status === 'online' && !currentNavigation && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Доступные заказы</h3>
+          <AvailableOrdersPanel />
+        </div>
+      )}
+
       {/* Order Notifications for Online Drivers */}
       {driver && driver.status === 'online' && (
         <DriverOrderNotifications />
@@ -368,7 +440,10 @@ const DriverApp = () => {
                 <div className="flex space-x-2">
                   {order.status === 'assigned' && (
                     <Button
-                      onClick={() => updateOrderStatus(order.id, 'picked_up')}
+                      onClick={() => {
+                        updateOrderStatus(order.id, 'picked_up');
+                        handleOrderPickup(order);
+                      }}
                       className="flex-1"
                     >
                       Забрать заказ
