@@ -66,18 +66,6 @@ const menuItems = [
     group: 'Аналитика'
   },
   {
-    title: 'Коммуникации',
-    url: '/admin/communications',
-    icon: MessageSquare,
-    group: 'Коммуникации'
-  },
-  {
-    title: 'Поддержка',
-    url: '/admin/support',
-    icon: HelpCircle,
-    group: 'Поддержка'
-  },
-  {
     title: 'Пользователи',
     url: '/admin/users',
     icon: Users,
@@ -100,6 +88,18 @@ const menuItems = [
     url: '/admin/settings',
     icon: Settings,
     group: 'Система'
+  },
+  {
+    title: 'Коммуникации',
+    url: '/admin/communications',
+    icon: MessageSquare,
+    group: 'Коммуникации'
+  },
+  {
+    title: 'Поддержка',
+    url: '/admin/support',
+    icon: HelpCircle,
+    group: 'Поддержка'
   }
 ];
 

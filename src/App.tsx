@@ -44,6 +44,9 @@ import DriversManagement from "./pages/admin/DriversManagement";
 import DisputesManagement from "./pages/admin/DisputesManagement";
 import CampaignsManagement from "./pages/admin/CampaignsManagement";
 import ReportsAnalytics from "./pages/admin/ReportsAnalytics";
+import SystemConfiguration from "./pages/admin/SystemConfiguration";
+import CommunicationsCenter from "./pages/admin/CommunicationsCenter";
+import SupportCenter from "./pages/admin/SupportCenter";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -96,6 +99,9 @@ const App = () => (
         <Route path="/admin/disputes" element={<DisputesManagement />} />
         <Route path="/admin/campaigns" element={<CampaignsManagement />} />
         <Route path="/admin/reports" element={<ReportsAnalytics />} />
+        <Route path="/admin/settings" element={<SystemConfiguration />} />
+        <Route path="/admin/communications" element={<CommunicationsCenter />} />
+        <Route path="/admin/support" element={<SupportCenter />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
