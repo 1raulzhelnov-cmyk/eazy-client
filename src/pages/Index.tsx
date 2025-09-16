@@ -2,11 +2,39 @@ import Header from "@/components/Header";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useState } from "react";
+import DriverApp from "./DriverApp";
 
 const Index = () => {
+  const [appMode, setAppMode] = useState<'customer' | 'driver'>('customer');
+
+  if (appMode === 'driver') {
+    return <DriverApp />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      
+      {/* App Mode Switcher */}
+      <div className="fixed top-4 right-4 z-50 flex bg-background border rounded-lg p-1 shadow-lg">
+        <Button
+          variant={appMode === 'customer' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setAppMode('customer')}
+          className="text-xs"
+        >
+          👤 Клиент
+        </Button>
+        <Button
+          variant={appMode !== 'customer' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setAppMode('driver')}
+          className="text-xs"
+        >
+          🚚 Курьер
+        </Button>
+      </div>
       
       {/* Hero Section */}
       <section className="bg-gradient-hero text-white py-20">
