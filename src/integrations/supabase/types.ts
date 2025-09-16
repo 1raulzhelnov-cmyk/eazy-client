@@ -520,6 +520,13 @@ export type Database = {
             foreignKeyName: "orders_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
+            referencedRelation: "driver_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
@@ -816,7 +823,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      driver_public_info: {
+        Row: {
+          first_name: string | null
+          id: string | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          last_name_initial: string | null
+          rating: number | null
+          status: string | null
+          total_deliveries: number | null
+          user_id: string | null
+          vehicle_type: string | null
+        }
+        Insert: {
+          first_name?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          last_name_initial?: never
+          rating?: number | null
+          status?: string | null
+          total_deliveries?: number | null
+          user_id?: string | null
+          vehicle_type?: string | null
+        }
+        Update: {
+          first_name?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          last_name_initial?: never
+          rating?: number | null
+          status?: string | null
+          total_deliveries?: number | null
+          user_id?: string | null
+          vehicle_type?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       create_system_notification: {
@@ -853,6 +898,10 @@ export type Database = {
       }
       is_driver: {
         Args: { user_uuid?: string }
+        Returns: boolean
+      }
+      user_can_view_driver_for_order: {
+        Args: { driver_user_id: string }
         Returns: boolean
       }
     }
