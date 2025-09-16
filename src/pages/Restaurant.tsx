@@ -55,7 +55,20 @@ const menuData = {
             description: "Классическая пицца с томатным соусом, моцареллой и свежим базиликом",
             weight: "500г",
             ingredients: ["томатный соус", "моцарелла", "базилик", "оливковое масло"],
-            popular: true
+            popular: true,
+            customizable: true,
+            sizes: [
+              { id: "small", name: "Маленькая (25см)", priceModifier: -3 },
+              { id: "medium", name: "Средняя (30см)", priceModifier: 0 },
+              { id: "large", name: "Большая (35см)", priceModifier: 5 }
+            ],
+            addons: [
+              { id: "extra-cheese", name: "Дополнительный сыр", price: 2, category: "Сыры" },
+              { id: "mozzarella", name: "Буффало моцарелла", price: 3, category: "Сыры" },
+              { id: "mushrooms", name: "Грибы", price: 2, category: "Овощи" },
+              { id: "olives", name: "Оливки", price: 1.5, category: "Овощи" },
+              { id: "tomatoes", name: "Черри томаты", price: 2, category: "Овощи" }
+            ]
           },
           {
             id: "pizza-2",
@@ -64,7 +77,20 @@ const menuData = {
             price: 15,
             description: "Острая пицца с пепперони, моцареллой и томатным соусом",
             weight: "520г",
-            ingredients: ["томатный соус", "моцарелла", "пепперони", "орегано"]
+            ingredients: ["томатный соус", "моцарелла", "пепперони", "орегано"],
+            customizable: true,
+            sizes: [
+              { id: "small", name: "Маленькая (25см)", priceModifier: -3 },
+              { id: "medium", name: "Средняя (30см)", priceModifier: 0 },
+              { id: "large", name: "Большая (35см)", priceModifier: 5 }
+            ],
+            addons: [
+              { id: "extra-pepperoni", name: "Дополнительный пепперони", price: 3, category: "Мясо" },
+              { id: "extra-cheese", name: "Дополнительный сыр", price: 2, category: "Сыры" },
+              { id: "jalapenos", name: "Халапеньо", price: 1.5, category: "Острое" },
+              { id: "bell-peppers", name: "Болгарский перец", price: 1.5, category: "Овощи" },
+              { id: "onions", name: "Красный лук", price: 1, category: "Овощи" }
+            ]
           },
           {
             id: "pizza-3", 
@@ -73,7 +99,20 @@ const menuData = {
             price: 18,
             description: "Изысканная пицца с четырьмя видами сыра на белом соусе",
             weight: "480г",
-            ingredients: ["белый соус", "моцарелла", "горгонзола", "пармезан", "рикотта"]
+            ingredients: ["белый соус", "моцарелла", "горгонзола", "пармезан", "рикотта"],
+            customizable: true,
+            sizes: [
+              { id: "small", name: "Маленькая (25см)", priceModifier: -4 },
+              { id: "medium", name: "Средняя (30см)", priceModifier: 0 },
+              { id: "large", name: "Большая (35см)", priceModifier: 6 }
+            ],
+            addons: [
+              { id: "gorgonzola-extra", name: "Дополнительная горгонзола", price: 3, category: "Сыры" },
+              { id: "parmesan-extra", name: "Дополнительный пармезан", price: 2.5, category: "Сыры" },
+              { id: "truffle-oil", name: "Трюфельное масло", price: 4, category: "Премиум" },
+              { id: "walnuts", name: "Грецкие орехи", price: 2, category: "Орехи" },
+              { id: "honey", name: "Мед", price: 1.5, category: "Сладкое" }
+            ]
           }
         ]
       },

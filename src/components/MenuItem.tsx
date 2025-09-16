@@ -1,8 +1,10 @@
-import { Plus, Minus } from "lucide-react";
+import { useState } from "react";
+import { Plus, Minus, Settings } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
+import ItemCustomization, { Size, Addon } from "./ItemCustomization";
 
 interface MenuItemProps {
   id: string;
@@ -16,6 +18,9 @@ interface MenuItemProps {
   popular?: boolean;
   restaurantId?: string;
   restaurantName?: string;
+  sizes?: Size[];
+  addons?: Addon[];
+  customizable?: boolean;
 }
 
 const MenuItem = ({ 
@@ -29,10 +34,14 @@ const MenuItem = ({
   weight,
   popular = false,
   restaurantId,
-  restaurantName
+  restaurantName,
+  sizes = [],
+  addons = [],
+  customizable = false
 }: MenuItemProps) => {
   const { addItem, updateQuantity, getItemQuantity } = useCart();
   const quantity = getItemQuantity(id);
+  const [showCustomization, setShowCustomization] = useState(false);
 
   const handleAddToCart = () => {
     addItem({
@@ -48,6 +57,27 @@ const MenuItem = ({
 
   const handleUpdateQuantity = (newQuantity: number) => {
     updateQuantity(id, newQuantity);
+  };
+
+  const handleCustomAddToCart = (customization: {
+    sizeId?: string;
+    selectedAddons: string[];
+    totalPrice: number;
+    quantity: number;
+  }) => {
+    // For now, just add the item with the calculated price
+    // In a real app, you'd store the customization details
+    for (let i = 0; i < customization.quantity; i++) {
+      addItem({
+        id: `${id}-${Date.now()}-${i}`, // Unique ID for customized items
+        name,
+        image,
+        price: customization.totalPrice / customization.quantity,
+        restaurantId,
+        restaurantName,
+        category: 'food'
+      });
+    }
   };
 
   return (
@@ -107,7 +137,27 @@ const MenuItem = ({
 
           {/* Add to Cart */}
           <div className="flex items-center gap-3">
-            {quantity === 0 ? (
+            {customizable ? (
+              <div className="flex items-center gap-2">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setShowCustomization(true)}
+                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                >
+                  <Settings className="w-4 h-4 mr-1" />
+                  Настроить
+                </Button>
+                <Button 
+                  size="sm" 
+                  onClick={handleAddToCart}
+                  className="bg-gradient-primary hover:shadow-glow transition-all"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  В корзину
+                </Button>
+              </div>
+            ) : quantity === 0 ? (
               <Button 
                 size="sm" 
                 onClick={handleAddToCart}
@@ -138,6 +188,18 @@ const MenuItem = ({
           </div>
         </div>
       </div>
+
+      {/* Item Customization Modal */}
+      <ItemCustomization
+        isOpen={showCustomization}
+        onClose={() => setShowCustomization(false)}
+        itemName={name}
+        itemImage={image}
+        basePrice={price}
+        sizes={sizes}
+        addons={addons}
+        onAddToCart={handleCustomAddToCart}
+      />
     </Card>
   );
 };
