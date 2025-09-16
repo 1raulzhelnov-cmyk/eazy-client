@@ -149,25 +149,29 @@ serve(async (req) => {
         )
       }
 
-      // Send notification to user
-      await supabaseAdmin
-        .from('notifications')
-        .insert({
-          user_id: application.user_id,
-          title: 'Заявка одобрена!',
-          message: 'Поздравляем! Ваша заявка на работу курьером была одобрена. Теперь вы можете начать принимать заказы.',
-          type: 'success'
-        })
+      // Send notification to user using secure function
+      const { error: notificationError } = await supabaseAdmin.rpc('create_system_notification', {
+        target_user_id: application.user_id,
+        notification_title: 'Заявка одобрена!',
+        notification_message: 'Поздравляем! Ваша заявка на работу курьером была одобрена. Теперь вы можете начать принимать заказы.',
+        notification_type: 'success'
+      })
+
+      if (notificationError) {
+        console.error('Failed to send approval notification:', notificationError)
+      }
     } else {
-      // Send rejection notification
-      await supabaseAdmin
-        .from('notifications')
-        .insert({
-          user_id: application.user_id,
-          title: 'Заявка отклонена',
-          message: `К сожалению, ваша заявка на работу курьером была отклонена. ${adminNotes ? `Причина: ${adminNotes}` : ''}`,
-          type: 'error'
-        })
+      // Send rejection notification using secure function
+      const { error: notificationError } = await supabaseAdmin.rpc('create_system_notification', {
+        target_user_id: application.user_id,
+        notification_title: 'Заявка отклонена',
+        notification_message: `К сожалению, ваша заявка на работу курьером была отклонена. ${adminNotes ? `Причина: ${adminNotes}` : ''}`,
+        notification_type: 'error'
+      })
+
+      if (notificationError) {
+        console.error('Failed to send rejection notification:', notificationError)
+      }
     }
 
     return new Response(

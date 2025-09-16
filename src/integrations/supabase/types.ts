@@ -819,6 +819,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_admin_permission: {
+        Args: { permission_key: string; user_uuid?: string }
+        Returns: boolean
+      }
+      check_is_admin: {
+        Args: { user_uuid?: string }
+        Returns: boolean
+      }
       create_system_notification: {
         Args: {
           action_url_param?: string
