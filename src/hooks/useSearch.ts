@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface SearchFilters {
   cuisine: string[];

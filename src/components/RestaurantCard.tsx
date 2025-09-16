@@ -1,5 +1,6 @@
 import { Clock, Star, Truck } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import LazyImage from "@/components/LazyImage";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 
@@ -29,7 +30,7 @@ const RestaurantCard = ({
       <Card className="group cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02]">
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
-          <img 
+          <LazyImage 
             src={image} 
             alt={name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"

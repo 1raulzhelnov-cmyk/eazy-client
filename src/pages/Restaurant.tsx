@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import MenuItem from "@/components/MenuItem";
+import Map from "@/components/Map";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Star, Truck } from "lucide-react";
@@ -322,21 +323,43 @@ const Restaurant = () => {
       {/* Menu Items */}
       <section className="pb-16">
         <div className="container mx-auto px-4 py-6">
-          {currentCategory && (
-            <>
-              <h2 className="text-2xl font-bold mb-6">{currentCategory.name}</h2>
-              <div className="space-y-4">
-                {currentCategory.items.map((item) => (
-                  <MenuItem 
-                    key={item.id} 
-                    {...item} 
-                    restaurantId={restaurant.id}
-                    restaurantName={restaurant.name}
-                  />
-                ))}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              {currentCategory && (
+                <>
+                  <h2 className="text-2xl font-bold mb-6">{currentCategory.name}</h2>
+                  <div className="space-y-4">
+                    {currentCategory.items.map((item) => (
+                      <MenuItem 
+                        key={item.id} 
+                        {...item} 
+                        restaurantId={restaurant.id}
+                        restaurantName={restaurant.name}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="space-y-6">
+              {/* Location Map */}
+              <div>
+                <h3 className="text-xl font-bold mb-4">Местоположение</h3>
+                <Map 
+                  restaurants={[{
+                    id: restaurant.id,
+                    name: restaurant.name,
+                    address: restaurant.address,
+                    lat: 55.7558,
+                    lng: 37.6173,
+                    rating: restaurant.rating
+                  }]}
+                  height="250px"
+                />
               </div>
-            </>
-          )}
+            </div>
+          </div>
         </div>
       </section>
     </div>
