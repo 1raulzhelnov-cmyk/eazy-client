@@ -819,6 +819,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_system_notification: {
+        Args: {
+          action_url_param?: string
+          notification_message: string
+          notification_title: string
+          notification_type?: string
+          related_order_id?: string
+          target_user_id: string
+        }
+        Returns: string
+      }
       get_restaurant_reviews: {
         Args: { restaurant_id_param: string }
         Returns: {
