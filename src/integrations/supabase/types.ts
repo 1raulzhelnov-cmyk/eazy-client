@@ -317,6 +317,42 @@ export type Database = {
         }
         Relationships: []
       }
+      marketing_integrations: {
+        Row: {
+          api_key: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          platform: string
+          settings: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          api_key: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          platform: string
+          settings?: Json | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          api_key?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          platform?: string
+          settings?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       menu_categories: {
         Row: {
           created_at: string
@@ -686,6 +722,51 @@ export type Database = {
           },
         ]
       }
+      payouts: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          external_payout_id: string | null
+          id: string
+          payout_id: string
+          processed_at: string | null
+          recipient_id: string
+          recipient_type: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          external_payout_id?: string | null
+          id?: string
+          payout_id: string
+          processed_at?: string | null
+          recipient_id: string
+          recipient_type: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          external_payout_id?: string | null
+          id?: string
+          payout_id?: string
+          processed_at?: string | null
+          recipient_id?: string
+          recipient_type?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -716,6 +797,105 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      promo_code_usage: {
+        Row: {
+          discount_amount: number
+          id: string
+          order_id: string | null
+          promo_code_id: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          discount_amount: number
+          id?: string
+          order_id?: string | null
+          promo_code_id: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          discount_amount?: number
+          id?: string
+          order_id?: string | null
+          promo_code_id?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promo_code_usage_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promo_code_usage_promo_code_id_fkey"
+            columns: ["promo_code_id"]
+            isOneToOne: false
+            referencedRelation: "promo_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      promo_codes: {
+        Row: {
+          applicable_to: string | null
+          code: string
+          created_at: string | null
+          current_usage: number | null
+          description: string | null
+          discount_type: string
+          discount_value: number
+          expiry_date: string | null
+          id: string
+          is_active: boolean | null
+          is_public: boolean | null
+          max_discount_amount: number | null
+          min_order_amount: number | null
+          target_id: string | null
+          updated_at: string | null
+          usage_limit: number | null
+        }
+        Insert: {
+          applicable_to?: string | null
+          code: string
+          created_at?: string | null
+          current_usage?: number | null
+          description?: string | null
+          discount_type: string
+          discount_value: number
+          expiry_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_public?: boolean | null
+          max_discount_amount?: number | null
+          min_order_amount?: number | null
+          target_id?: string | null
+          updated_at?: string | null
+          usage_limit?: number | null
+        }
+        Update: {
+          applicable_to?: string | null
+          code?: string
+          created_at?: string | null
+          current_usage?: number | null
+          description?: string | null
+          discount_type?: string
+          discount_value?: number
+          expiry_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_public?: boolean | null
+          max_discount_amount?: number | null
+          min_order_amount?: number | null
+          target_id?: string | null
+          updated_at?: string | null
+          usage_limit?: number | null
         }
         Relationships: []
       }
@@ -869,6 +1049,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "restaurant_hours_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurant_integrations: {
+        Row: {
+          created_at: string | null
+          credentials: Json
+          id: string
+          integration_type: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          provider: string
+          restaurant_id: string
+          settings: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          credentials: Json
+          id?: string
+          integration_type: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          provider: string
+          restaurant_id: string
+          settings?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          credentials?: Json
+          id?: string
+          integration_type?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          provider?: string
+          restaurant_id?: string
+          settings?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_integrations_restaurant_id_fkey"
             columns: ["restaurant_id"]
             isOneToOne: false
             referencedRelation: "restaurants"
