@@ -12,6 +12,7 @@ import Flowers from "./pages/Flowers";
 import Balloons from "./pages/Balloons";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
+import OrderTracking from "./pages/OrderTracking";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
@@ -37,6 +38,7 @@ const App = () => (
               <Route path="/balloons" element={<Balloons />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/order-tracking/:orderId" element={<OrderTracking />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/orders" element={<Orders />} />

@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Search, Clock, CheckCircle, XCircle, Truck, Package } from "lucide-react";
+import { ArrowLeft, Search, Clock, CheckCircle, XCircle, Truck, Package, Eye } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -42,6 +42,7 @@ const Orders = () => {
       return;
     }
 
+    // For demo purposes, add mock orders if no orders exist
     fetchOrders();
   }, [user, navigate]);
 
@@ -56,7 +57,73 @@ const Orders = () => {
         throw error;
       }
 
-      setOrders((data as Order[]) || []);
+      let ordersData = (data as Order[]) || [];
+      
+      // Add mock orders for demo if no orders exist
+      if (ordersData.length === 0) {
+        ordersData = [
+          {
+            id: "1",
+            order_number: "1234",
+            status: "delivering",
+            items: [
+              { 
+                name: "Пицца Маргарита (большая)", 
+                quantity: 1, 
+                price: 15, 
+                image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=100&h=100&fit=crop",
+                restaurantName: "Piccola Italia"
+              },
+              { 
+                name: "Кола 0.5л", 
+                quantity: 2, 
+                price: 2.5, 
+                image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=100&h=100&fit=crop"
+              }
+            ],
+            total_amount: 20,
+            payment_status: "paid",
+            payment_method: "card",
+            delivery_address: { address: "ул. Пушкина, д. 10, кв. 5", city: "Нарва" },
+            customer_info: {},
+            special_instructions: "Позвоните перед доставкой",
+            estimated_delivery_time: "20:30",
+            created_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+            updated_at: new Date(Date.now() - 1000 * 60 * 10).toISOString()
+          },
+          {
+            id: "2",
+            order_number: "1235",
+            status: "delivered",
+            items: [
+              { 
+                name: "Сет Филадельфия (8 шт)", 
+                quantity: 1, 
+                price: 22, 
+                image: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=100&h=100&fit=crop",
+                restaurantName: "Tokyo Sushi"
+              },
+              { 
+                name: "Суп Мисо", 
+                quantity: 1, 
+                price: 8, 
+                image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=100&h=100&fit=crop",
+                restaurantName: "Tokyo Sushi"
+              }
+            ],
+            total_amount: 30,
+            payment_status: "paid", 
+            payment_method: "cash",
+            delivery_address: { address: "пр. Мира, д. 25, офис 301", city: "Нарва" },
+            customer_info: {},
+            delivered_at: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
+            created_at: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
+            updated_at: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString()
+          }
+        ];
+      }
+
+      setOrders(ordersData);
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
@@ -242,14 +309,26 @@ const Orders = () => {
 
                   {/* Actions */}
                   <div className="flex gap-2 mt-4">
+                    {/* Show tracking for active orders */}
+                    {['confirmed', 'preparing', 'ready', 'delivering'].includes(order.status) && (
+                      <Link to={`/order-tracking/${order.id}`}>
+                        <Button variant="outline" size="sm" className="bg-primary/10 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                          <Eye className="w-4 h-4 mr-2" />
+                          Отследить заказ
+                        </Button>
+                      </Link>
+                    )}
+                    
                     <Button variant="outline" size="sm">
                       Повторить заказ
                     </Button>
+                    
                     {order.status === 'delivered' && (
                       <Button variant="outline" size="sm">
                         Оставить отзыв
                       </Button>
                     )}
+                    
                     {order.status === 'pending' && (
                       <Button variant="outline" size="sm" className="text-destructive">
                         Отменить заказ

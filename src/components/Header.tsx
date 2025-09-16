@@ -1,4 +1,4 @@
-import { Search, MapPin, User, LogIn } from "lucide-react";
+import { Search, MapPin, User, LogIn, Bell, Heart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import CartSheet from "@/components/CartSheet";
 import { useAuth } from "@/contexts/AuthContext";
+import NotificationCenter from "@/components/NotificationCenter";
 
 const Header = () => {
   const location = useLocation();
@@ -135,6 +136,14 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            {user && <NotificationCenter />}
+            
+            <Link to="/favorites">
+              <Button variant="ghost" size="sm">
+                <Heart className="w-5 h-5" />
+              </Button>
+            </Link>
+            
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
