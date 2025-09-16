@@ -60,7 +60,7 @@ const DriverRegistrationForm = () => {
       });
 
       const { error: uploadError } = await supabase.storage
-        .from('driver-documents-secure')
+        .from('driver-documents')
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;

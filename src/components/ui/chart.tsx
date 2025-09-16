@@ -65,26 +65,46 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null;
   }
 
-  return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
-  })
-  .join("\n")}
-}
-`,
-          )
-          .join("\n"),
-      }}
-    />
-  );
+  // Create CSS content safely 
+  const cssContent = Object.entries(THEMES)
+    .map(([theme, prefix]) => {
+      const rules = colorConfig
+        .map(([key, itemConfig]) => {
+          const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
+          return color ? `  --color-${key}: ${color};` : null;
+        })
+        .filter(Boolean)
+        .join('\n');
+      
+      return rules ? `${prefix} [data-chart=${id}] {\n${rules}\n}` : null;
+    })
+    .filter(Boolean)
+    .join('\n');
+
+  // Use React's built-in style injection instead of dangerouslySetInnerHTML
+  React.useEffect(() => {
+    const styleId = `chart-style-${id}`;
+    let existingStyle = document.getElementById(styleId) as HTMLStyleElement;
+    
+    if (!existingStyle) {
+      existingStyle = document.createElement('style');
+      existingStyle.id = styleId;
+      document.head.appendChild(existingStyle);
+    }
+    
+    // Safely set CSS content
+    existingStyle.textContent = cssContent;
+    
+    return () => {
+      // Cleanup on unmount
+      const styleElement = document.getElementById(styleId);
+      if (styleElement) {
+        styleElement.remove();
+      }
+    };
+  }, [id, cssContent]);
+
+  return null;
 };
 
 const ChartTooltip = RechartsPrimitive.Tooltip;

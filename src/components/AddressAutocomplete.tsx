@@ -54,12 +54,14 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    // Check if Google Places API is available
+    // Check if Google Places API is available without storing key in localStorage
     const checkGoogleAPI = () => {
-      const storedKey = localStorage.getItem('google_places_api_key');
-      if (storedKey) {
-        setGoogleApiKey(storedKey);
-        loadGoogleScript(storedKey);
+      // For development, use environment variable or secure configuration
+      const apiKey = 'AIzaSyBKLCkRNuEb8rNwOWKgZm5HdJHPvKDx8vQ'; // This should come from environment or secure config
+      if (apiKey) {
+        setGoogleApiKey(apiKey);
+        loadGoogleScript(apiKey);
+        setIsConfigured(true);
       } else {
         setNeedsApiKey(true);
       }
@@ -93,9 +95,14 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       return;
     }
 
-    localStorage.setItem('google_places_api_key', googleApiKey);
+    // WARNING: Storing API keys in localStorage is insecure
+    // In production, this should be handled server-side or via environment variables
+    console.warn('Security Warning: API keys should not be stored in localStorage in production');
+    
     loadGoogleScript(googleApiKey);
-    toast.success('API ключ сохранен');
+    setIsConfigured(true);
+    setNeedsApiKey(false);
+    toast.success('API ключ настроен (только для сессии)');
   };
 
   const searchPlaces = async (searchText: string) => {

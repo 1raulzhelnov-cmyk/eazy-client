@@ -939,6 +939,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_get_driver_document: {
+        Args: { document_type: string; driver_user_id: string }
+        Returns: {
+          content_type: string
+          created_at: string
+          file_name: string
+          file_path: string
+          size: number
+        }[]
+      }
       audit_data_access: {
         Args: {
           action_name: string
@@ -947,6 +957,10 @@ export type Database = {
           resource_name: string
         }
         Returns: undefined
+      }
+      can_access_driver_document: {
+        Args: { document_path: string; driver_user_id: string }
+        Returns: boolean
       }
       check_admin_permission: {
         Args: { permission_key: string; user_uuid?: string }
