@@ -9,6 +9,8 @@ import { ArrowLeft, Mail, Lock, User, Phone } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
+import PasswordStrengthIndicator from "@/components/PasswordStrengthIndicator";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -248,9 +250,7 @@ const Auth = () => {
                   />
                 </div>
                 {isSignUp && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Минимум 6 символов
-                  </p>
+                  <PasswordStrengthIndicator password={formData.password} />
                 )}
               </div>
 
@@ -266,6 +266,11 @@ const Auth = () => {
                 )}
               </Button>
             </form>
+
+            <Separator className="my-6" />
+
+            {/* Google Sign In */}
+            <GoogleSignInButton />
 
             <Separator className="my-6" />
 
