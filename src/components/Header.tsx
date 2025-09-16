@@ -184,6 +184,10 @@ const Header = () => {
                     <Link to="/support" className="cursor-pointer">Поддержка</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/driver" className="cursor-pointer">🚚 Стать курьером</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
                     Выйти
                   </DropdownMenuItem>

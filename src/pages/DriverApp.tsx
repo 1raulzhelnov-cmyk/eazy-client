@@ -7,6 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { MapPin, Clock, Package, Star, User, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import DriverRegistrationForm from '@/components/DriverRegistrationForm';
+import DriverApplicationStatus from '@/components/DriverApplicationStatus';
+import DriverOrderNotifications from '@/components/DriverOrderNotifications';
 
 interface Driver {
   id: string;
@@ -38,13 +41,14 @@ const DriverApp = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [driver, setDriver] = useState<Driver | null>(null);
+  const [application, setApplication] = useState<any>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
       fetchDriverProfile();
-      fetchAssignedOrders();
+      fetchDriverApplication();
     }
   }, [user]);
 
@@ -62,10 +66,35 @@ const DriverApp = () => {
       }
 
       setDriver(data);
+      
+      if (data) {
+        fetchAssignedOrders();
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchDriverApplication = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('driver_applications')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching application:', error);
+        return;
+      }
+
+      setApplication(data);
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -194,22 +223,20 @@ const DriverApp = () => {
     );
   }
 
-  if (!driver) {
+  if (!driver && !application) {
     return (
       <div className="min-h-screen bg-background p-4">
-        <Card className="max-w-md mx-auto">
-          <CardHeader>
-            <CardTitle className="text-center">Регистрация курьера</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center">
-            <p className="text-muted-foreground mb-4">
-              Вы не зарегистрированы как курьер. Подайте заявку для начала работы.
-            </p>
-            <Button className="w-full">
-              Подать заявку
-            </Button>
-          </CardContent>
-        </Card>
+        <DriverRegistrationForm />
+      </div>
+    );
+  }
+
+  if (!driver && application) {
+    return (
+      <div className="min-h-screen bg-background p-4">
+        <div className="max-w-2xl mx-auto">
+          <DriverApplicationStatus />
+        </div>
       </div>
     );
   }
@@ -257,6 +284,11 @@ const DriverApp = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Order Notifications for Online Drivers */}
+      {driver && driver.status === 'online' && (
+        <DriverOrderNotifications />
+      )}
 
       {/* Orders */}
       <div className="space-y-4">
