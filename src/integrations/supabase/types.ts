@@ -655,39 +655,7 @@ export type Database = {
       }
     }
     Views: {
-      public_reviews: {
-        Row: {
-          anonymous_user_id: string | null
-          created_at: string | null
-          id: string | null
-          photos: string[] | null
-          rating: number | null
-          restaurant_id: string | null
-          review_text: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          anonymous_user_id?: never
-          created_at?: string | null
-          id?: string | null
-          photos?: string[] | null
-          rating?: number | null
-          restaurant_id?: string | null
-          review_text?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          anonymous_user_id?: never
-          created_at?: string | null
-          id?: string | null
-          photos?: string[] | null
-          rating?: number | null
-          restaurant_id?: string | null
-          review_text?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       get_restaurant_reviews: {

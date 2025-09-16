@@ -9,13 +9,13 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface Review {
   id: string;
-  user_id: string;
   restaurant_id: string;
   rating: number;
   review_text: string;
   photos: string[] | null;
   created_at: string;
-  order_id?: string;
+  updated_at: string;
+  anonymous_user_id: string | null;
 }
 
 interface RestaurantReviewsProps {
@@ -38,40 +38,45 @@ const RestaurantReviews = ({
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      let query = supabase
-        .from('reviews')
-        .select('*')
-        .eq('restaurant_id', restaurantId);
-
-      // Apply sorting
-      switch (sortBy) {
-        case 'newest':
-          query = query.order('created_at', { ascending: false });
-          break;
-        case 'oldest':
-          query = query.order('created_at', { ascending: true });
-          break;
-        case 'highest':
-          query = query.order('rating', { ascending: false });
-          break;
-        case 'lowest':
-          query = query.order('rating', { ascending: true });
-          break;
-      }
-
-      const { data, error } = await query;
+      // Use the secure function to get reviews with anonymized data
+      const { data, error } = await supabase
+        .rpc('get_restaurant_reviews', { 
+          restaurant_id_param: restaurantId 
+        });
 
       if (error) {
         throw error;
       }
 
-      setReviews(data || []);
+      let reviewsData = data || [];
+
+      // Apply client-side sorting since the function doesn't support all sort options
+      switch (sortBy) {
+        case 'newest':
+          reviewsData = reviewsData.sort((a: any, b: any) => 
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
+          break;
+        case 'oldest':
+          reviewsData = reviewsData.sort((a: any, b: any) => 
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          );
+          break;
+        case 'highest':
+          reviewsData = reviewsData.sort((a: any, b: any) => b.rating - a.rating);
+          break;
+        case 'lowest':
+          reviewsData = reviewsData.sort((a: any, b: any) => a.rating - b.rating);
+          break;
+      }
+
+      setReviews(reviewsData);
 
       // Calculate average rating
-      if (data && data.length > 0) {
-        const avg = data.reduce((sum, review) => sum + review.rating, 0) / data.length;
+      if (reviewsData && reviewsData.length > 0) {
+        const avg = reviewsData.reduce((sum: number, review: any) => sum + review.rating, 0) / reviewsData.length;
         setAverageRating(Math.round(avg * 10) / 10);
-        setTotalReviews(data.length);
+        setTotalReviews(reviewsData.length);
       } else {
         setAverageRating(0);
         setTotalReviews(0);
@@ -102,7 +107,7 @@ const RestaurantReviews = ({
   };
 
   const formatUserName = (review: Review): string => {
-    return `Пользователь ${review.user_id.slice(0, 8)}`;
+    return review.anonymous_user_id ? `Пользователь ${review.anonymous_user_id}` : 'Анонимный пользователь';
   };
 
   return (
@@ -219,7 +224,7 @@ const RestaurantReviews = ({
               createdAt={review.created_at}
               helpful={Math.floor(Math.random() * 10)} // Mock data
               notHelpful={Math.floor(Math.random() * 3)} // Mock data
-              isVerified={!!review.order_id}
+              isVerified={false} // No longer expose order verification status for privacy
             />
           ))
         ) : (
