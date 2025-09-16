@@ -655,10 +655,57 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_reviews: {
+        Row: {
+          anonymous_user_id: string | null
+          created_at: string | null
+          id: string | null
+          order_id: string | null
+          photos: string[] | null
+          rating: number | null
+          restaurant_id: string | null
+          review_text: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          anonymous_user_id?: never
+          created_at?: string | null
+          id?: string | null
+          order_id?: never
+          photos?: string[] | null
+          rating?: number | null
+          restaurant_id?: string | null
+          review_text?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          anonymous_user_id?: never
+          created_at?: string | null
+          id?: string | null
+          order_id?: never
+          photos?: string[] | null
+          rating?: number | null
+          restaurant_id?: string | null
+          review_text?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      get_restaurant_reviews: {
+        Args: { restaurant_id_param: string }
+        Returns: {
+          anonymous_user_id: string
+          created_at: string
+          id: string
+          photos: string[]
+          rating: number
+          restaurant_id: string
+          review_text: string
+          updated_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
