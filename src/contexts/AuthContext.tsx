@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { globalRateLimiter } from '@/utils/security';
 
 interface Profile {
   id: string;
@@ -158,10 +159,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signIn = async (email: string, password: string) => {
     try {
       setLoading(true);
+      
+      // Rate limiting for sign in attempts
+      const clientId = `signin_${email}`;
+      if (!globalRateLimiter.canAttempt(clientId)) {
+        return { error: { message: 'Слишком много попыток входа. Попробуйте позже.' } };
+      }
+      
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
+      
+      if (!error) {
+        // Reset rate limiter on successful login
+        globalRateLimiter.reset(clientId);
+      }
+      
       return { error };
     } catch (error) {
       return { error };

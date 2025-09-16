@@ -100,18 +100,34 @@ const Map: React.FC<MapProps> = ({
     restaurantData.forEach((restaurant) => {
       const el = document.createElement('div');
       el.className = 'restaurant-marker';
-      el.innerHTML = '🍽️';
+      el.textContent = '🍽️';
       el.style.fontSize = '24px';
       el.style.cursor = 'pointer';
 
+      // Create popup content safely
+      const popupDiv = document.createElement('div');
+      popupDiv.className = 'p-2';
+      
+      const title = document.createElement('h3');
+      title.className = 'font-semibold';
+      title.textContent = restaurant.name;
+      
+      const address = document.createElement('p');
+      address.className = 'text-sm text-gray-600';
+      address.textContent = restaurant.address;
+      
+      popupDiv.appendChild(title);
+      popupDiv.appendChild(address);
+      
+      if (restaurant.rating) {
+        const rating = document.createElement('p');
+        rating.className = 'text-sm';
+        rating.textContent = `⭐ ${restaurant.rating}`;
+        popupDiv.appendChild(rating);
+      }
+
       const popup = new mapboxgl.Popup({ offset: 25 })
-        .setHTML(`
-          <div class="p-2">
-            <h3 class="font-semibold">${restaurant.name}</h3>
-            <p class="text-sm text-gray-600">${restaurant.address}</p>
-            ${restaurant.rating ? `<p class="text-sm">⭐ ${restaurant.rating}</p>` : ''}
-          </div>
-        `);
+        .setDOMContent(popupDiv);
 
       new mapboxgl.Marker(el)
         .setLngLat([restaurant.lng, restaurant.lat])
@@ -123,16 +139,26 @@ const Map: React.FC<MapProps> = ({
     if (deliveryLocation) {
       const el = document.createElement('div');
       el.className = 'delivery-marker';
-      el.innerHTML = '📍';
+      el.textContent = '📍';
       el.style.fontSize = '24px';
 
+      // Create popup content safely
+      const popupDiv = document.createElement('div');
+      popupDiv.className = 'p-2';
+      
+      const title = document.createElement('h3');
+      title.className = 'font-semibold';
+      title.textContent = 'Адрес доставки';
+      
+      const address = document.createElement('p');
+      address.className = 'text-sm text-gray-600';
+      address.textContent = deliveryLocation.address;
+      
+      popupDiv.appendChild(title);
+      popupDiv.appendChild(address);
+
       const popup = new mapboxgl.Popup({ offset: 25 })
-        .setHTML(`
-          <div class="p-2">
-            <h3 class="font-semibold">Адрес доставки</h3>
-            <p class="text-sm text-gray-600">${deliveryLocation.address}</p>
-          </div>
-        `);
+        .setDOMContent(popupDiv);
 
       new mapboxgl.Marker(el)
         .setLngLat([deliveryLocation.lng, deliveryLocation.lat])
@@ -148,7 +174,7 @@ const Map: React.FC<MapProps> = ({
           
           const el = document.createElement('div');
           el.className = 'user-marker';
-          el.innerHTML = '📱';
+          el.textContent = '📱';
           el.style.fontSize = '20px';
 
           new mapboxgl.Marker(el)

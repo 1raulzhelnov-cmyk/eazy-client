@@ -863,6 +863,17 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_safe_driver_info_for_order: {
+        Args: { order_id_param: string }
+        Returns: {
+          driver_id: string
+          first_name: string
+          last_name_initial: string
+          rating: number
+          status: string
+          vehicle_type: string
+        }[]
+      }
       has_admin_permission: {
         Args: { permission_key: string; user_uuid?: string }
         Returns: boolean
