@@ -1,49 +1,49 @@
 project_id = "vbryznobkmhnmrjnbcln"
 
 [functions.create-payment]
-verify_jwt = false
+verify_jwt = true
 
 [functions.verify-payment] 
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-recommendations]
 verify_jwt = false
 
 [functions.approve-driver-application]
-verify_jwt = false
+verify_jwt = true
 
 [functions.advanced-search]
 verify_jwt = false
 
 [functions.enhanced-payment-processing]
-verify_jwt = false
+verify_jwt = true
 
 [functions.delivery-management]
-verify_jwt = false
+verify_jwt = true
 
 [functions.geolocation-services]
-verify_jwt = false
+verify_jwt = true
 
 [functions.notification-system]
-verify_jwt = false
+verify_jwt = true
 
 [functions.analytics-reporting]
-verify_jwt = false
+verify_jwt = true
 
 [functions.user-management-api]
-verify_jwt = false
+verify_jwt = true
 
 [functions.restaurant-management-api]
-verify_jwt = false
+verify_jwt = true
 
 [functions.order-processing-api]
-verify_jwt = false
+verify_jwt = true
 
 [functions.real-time-communication]
-verify_jwt = false
+verify_jwt = true
 
 [functions.file-upload-service]
-verify_jwt = false
+verify_jwt = true
 
 [functions.driver-management-api]
-verify_jwt = false
+verify_jwt = true

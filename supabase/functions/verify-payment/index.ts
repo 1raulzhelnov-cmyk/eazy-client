@@ -12,6 +12,12 @@ serve(async (req) => {
   }
 
   try {
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization')?.replace('Bearer ', '')
+    if (!authHeader) {
+      throw new Error('Authentication required')
+    }
+
     const { sessionId } = await req.json();
     
     if (!sessionId) {

@@ -13,6 +13,12 @@ serve(async (req) => {
   }
 
   try {
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization')?.replace('Bearer ', '')
+    if (!authHeader) {
+      throw new Error('Authentication required')
+    }
+
     const { orderData, items, total } = await req.json();
     
     if (!orderData || !items || !total) {
