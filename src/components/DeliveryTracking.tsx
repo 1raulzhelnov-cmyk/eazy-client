@@ -4,26 +4,60 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Map from './Map';
 import { MapPin, Clock, Phone, MessageCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface DeliveryTrackingProps {
   orderId: string;
   deliveryAddress: string;
   estimatedTime: string;
-  courierName?: string;
-  courierPhone?: string;
+}
+
+interface SafeDriverInfo {
+  driver_id: string;
+  first_name: string;
+  last_name_initial: string;
+  rating: number;
+  vehicle_type: string;
+  status: string;
 }
 
 const DeliveryTracking: React.FC<DeliveryTrackingProps> = ({
   orderId,
   deliveryAddress,
-  estimatedTime,
-  courierName = "Александр",
-  courierPhone = "+7 (999) 123-45-67"
+  estimatedTime
 }) => {
   const [courierLocation, setCourierLocation] = useState({
     lat: 55.7528,
     lng: 37.6200
   });
+  const [driverInfo, setDriverInfo] = useState<SafeDriverInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch safe driver info
+  useEffect(() => {
+    const fetchDriverInfo = async () => {
+      try {
+        const { data, error } = await supabase.rpc('get_safe_driver_info_for_order', {
+          order_id_param: orderId
+        });
+
+        if (error) {
+          console.error('Error fetching driver info:', error);
+          return;
+        }
+
+        setDriverInfo(data && data.length > 0 ? data[0] : null);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (orderId) {
+      fetchDriverInfo();
+    }
+  }, [orderId]);
 
   const deliveryLocation = {
     lat: 55.7558,
@@ -101,8 +135,12 @@ const DeliveryTracking: React.FC<DeliveryTrackingProps> = ({
                 <span className="text-lg">🚗</span>
               </div>
               <div>
-                <h4 className="font-semibold">{courierName}</h4>
-                <p className="text-sm text-muted-foreground">Курьер</p>
+                <h4 className="font-semibold">
+                  {loading ? 'Загрузка...' : driverInfo ? `${driverInfo.first_name} ${driverInfo.last_name_initial}` : 'Курьер'}
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  {driverInfo ? `${driverInfo.vehicle_type} • ⭐ ${driverInfo.rating}` : 'Курьер'}
+                </p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -137,7 +175,7 @@ const DeliveryTracking: React.FC<DeliveryTrackingProps> = ({
           <Map 
             restaurants={[{
               id: 'courier',
-              name: `Курьер ${courierName}`,
+              name: driverInfo ? `Курьер ${driverInfo.first_name} ${driverInfo.last_name_initial}` : 'Курьер',
               address: 'Текущее местоположение',
               lat: courierLocation.lat,
               lng: courierLocation.lng
