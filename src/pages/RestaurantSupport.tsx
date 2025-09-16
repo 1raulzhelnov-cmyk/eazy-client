@@ -1,5 +1,5 @@
 import React from 'react';
-import RestaurantSupportCenter from '@/components/RestaurantSupportCenter';
+import { RestaurantSupportCenter } from '@/components/RestaurantSupportCenter';
 
 const RestaurantSupport = () => {
   return (

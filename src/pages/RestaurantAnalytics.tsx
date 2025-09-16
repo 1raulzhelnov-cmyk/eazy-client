@@ -1,5 +1,5 @@
 import React from 'react';
-import RestaurantAnalyticsDashboard from '@/components/RestaurantAnalyticsDashboard';
+import { RestaurantAnalyticsDashboard } from '@/components/RestaurantAnalyticsDashboard';
 
 const RestaurantAnalytics = () => {
   return (
