@@ -38,6 +38,15 @@ const Index = () => {
         >
           🚚 Курьер
         </Button>
+        <Link to="/restaurant-dashboard">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs"
+          >
+            🏪 Ресторан
+          </Button>
+        </Link>
       </div>
       
       {/* Hero Section */}
