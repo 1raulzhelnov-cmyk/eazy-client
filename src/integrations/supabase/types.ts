@@ -14,7 +14,218 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      addresses: {
+        Row: {
+          address_line_1: string
+          address_line_2: string | null
+          city: string
+          country: string
+          created_at: string
+          delivery_instructions: string | null
+          id: string
+          is_default: boolean | null
+          latitude: number | null
+          longitude: number | null
+          postal_code: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address_line_1: string
+          address_line_2?: string | null
+          city?: string
+          country?: string
+          created_at?: string
+          delivery_instructions?: string | null
+          id?: string
+          is_default?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          postal_code: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address_line_1?: string
+          address_line_2?: string | null
+          city?: string
+          country?: string
+          created_at?: string
+          delivery_instructions?: string | null
+          id?: string
+          is_default?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          postal_code?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          item_data: Json
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_data: Json
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_data?: Json
+          item_id?: string
+          item_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_info: Json
+          delivered_at: string | null
+          delivery_address: Json
+          estimated_delivery_time: string | null
+          id: string
+          items: Json
+          order_number: string
+          payment_method: string
+          payment_status: string
+          special_instructions: string | null
+          status: string
+          stripe_session_id: string | null
+          total_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_info: Json
+          delivered_at?: string | null
+          delivery_address: Json
+          estimated_delivery_time?: string | null
+          id?: string
+          items: Json
+          order_number: string
+          payment_method?: string
+          payment_status?: string
+          special_instructions?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_amount: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_info?: Json
+          delivered_at?: string | null
+          delivery_address?: Json
+          estimated_delivery_time?: string | null
+          id?: string
+          items?: Json
+          order_number?: string
+          payment_method?: string
+          payment_status?: string
+          special_instructions?: string | null
+          status?: string
+          stripe_session_id?: string | null
+          total_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          photos: string[] | null
+          rating: number
+          restaurant_id: string
+          review_text: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          photos?: string[] | null
+          rating: number
+          restaurant_id: string
+          review_text?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          photos?: string[] | null
+          rating?: number
+          restaurant_id?: string
+          review_text?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
