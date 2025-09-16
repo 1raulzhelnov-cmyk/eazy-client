@@ -1,7 +1,10 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
+import FlowerBouquetBuilder from "@/components/FlowerBouquetBuilder";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 const flowerCategories = [
   { id: "all", name: "Все цветы", icon: "🌸" },
@@ -95,10 +98,36 @@ const FlowerCategoryFilter = ({ selectedCategory, onCategoryChange }: {selectedC
 
 const Flowers = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [showBouquetBuilder, setShowBouquetBuilder] = useState(false);
 
   const filteredFlowers = selectedCategory === "all" 
     ? flowers 
     : flowers.filter(flower => flower.category === selectedCategory);
+
+  const handleAddToCart = (bouquet: any) => {
+    console.log('Custom bouquet added to cart:', bouquet);
+    // In a real app, this would add the bouquet to the cart
+    alert('Букет добавлен в корзину!');
+    setShowBouquetBuilder(false);
+  };
+
+  if (showBouquetBuilder) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-6">
+          <Button 
+            variant="ghost" 
+            onClick={() => setShowBouquetBuilder(false)}
+            className="mb-4"
+          >
+            ← Назад к каталогу
+          </Button>
+          <FlowerBouquetBuilder onAddToCart={handleAddToCart} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -124,8 +153,18 @@ const Flowers = () => {
               Доставка 30 мин
             </Badge>
           </div>
+          <div className="mt-6">
+            <Button 
+              onClick={() => setShowBouquetBuilder(true)}
+              className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-3"
+            >
+              🎨 Создать свой букет
+            </Button>
+          </div>
         </div>
       </section>
+
+      <Separator className="bg-white/20" />
 
       {/* Filters */}
       <section className="py-6">

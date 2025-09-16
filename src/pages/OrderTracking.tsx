@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import OrderTrackingComponent from "@/components/OrderTracking";
 import DeliveryTracking from "@/components/DeliveryTracking";
+import OrderCancellation from "@/components/OrderCancellation";
 
 // Mock order data
 const mockOrderData: Record<string, any> = {
@@ -107,6 +108,17 @@ const OrderTrackingPage = () => {
               estimatedTime="19:15"
             />
           </div>
+        </div>
+
+        {/* Order Cancellation */}
+        <div className="mt-8 max-w-2xl mx-auto">
+          <OrderCancellation
+            orderId={orderData.orderId}
+            onCancel={(orderId, reason) => {
+              console.log('Order cancelled:', orderId, reason);
+              alert(`Заказ #${orderId} отменен. Причина: ${reason}`);
+            }}
+          />
         </div>
       </div>
     </div>

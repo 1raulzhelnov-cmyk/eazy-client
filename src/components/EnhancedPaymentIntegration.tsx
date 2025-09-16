@@ -223,12 +223,10 @@ export const EnhancedPaymentIntegration = ({
           throw new Error('Apple Pay недоступен на этом устройстве');
         }
         // Симуляция Apple Pay для демо
-        onPaymentSuccess(`apple_pay_${Date.now()}`);
+        setTimeout(() => {
+          onPaymentSuccess(`apple_pay_${Date.now()}`);
+        }, 1000);
       } else if (walletType === 'google_pay') {
-        // Симуляция Google Pay для демо
-        onPaymentSuccess(`google_pay_${Date.now()}`);
-      }
-        
         const paymentDataRequest = {
           apiVersion: 2,
           apiVersionMinor: 0,
@@ -247,16 +245,19 @@ export const EnhancedPaymentIntegration = ({
         };
         
         console.log('Payment request:', paymentDataRequest);
+        // Симуляция Google Pay для демо
+        setTimeout(() => {
+          onPaymentSuccess(`google_pay_${Date.now()}`);
+        }, 1000);
+      } else {
+        // Для других цифровых кошельков
+        setTimeout(() => {
+          onPaymentSuccess(`${walletType}_${Date.now()}`);
+        }, 1000);
       }
-      
-      // Симулируем успешную оплату
-      setTimeout(() => {
-        onPaymentSuccess(`${walletType}_${Date.now()}`);
-      }, 2000);
       
     } catch (error) {
       onPaymentError(error instanceof Error ? error.message : 'Ошибка цифрового кошелька');
-    } finally {
       setLoading(false);
     }
   };
