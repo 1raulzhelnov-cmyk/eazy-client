@@ -65,29 +65,77 @@ export type Database = {
         }
         Relationships: []
       }
+      chats: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          id: string
+          last_message_at: string | null
+          order_id: string | null
+          status: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          order_id?: string | null
+          status?: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          order_id?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
+          category: string | null
           created_at: string
           id: string
           item_data: Json
           item_id: string
           item_type: string
+          notes: string | null
+          priority: number | null
+          tags: string[] | null
           user_id: string
         }
         Insert: {
+          category?: string | null
           created_at?: string
           id?: string
           item_data: Json
           item_id: string
           item_type: string
+          notes?: string | null
+          priority?: number | null
+          tags?: string[] | null
           user_id: string
         }
         Update: {
+          category?: string | null
           created_at?: string
           id?: string
           item_data?: Json
           item_id?: string
           item_type?: string
+          notes?: string | null
+          priority?: number | null
+          tags?: string[] | null
           user_id?: string
         }
         Relationships: []
@@ -122,6 +170,101 @@ export type Database = {
           total_spent?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          chat_id: string
+          content: string
+          created_at: string
+          file_name: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          message_type: string
+          read_at: string | null
+          sender_id: string
+          sender_type: string
+        }
+        Insert: {
+          chat_id: string
+          content: string
+          created_at?: string
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          message_type?: string
+          read_at?: string | null
+          sender_id: string
+          sender_type: string
+        }
+        Update: {
+          chat_id?: string
+          content?: string
+          created_at?: string
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          message_type?: string
+          read_at?: string | null
+          sender_id?: string
+          sender_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_settings: {
+        Row: {
+          created_at: string
+          driver_updates: boolean
+          id: string
+          marketing: boolean
+          order_updates: boolean
+          promotions: boolean
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          sound_enabled: boolean
+          updated_at: string
+          user_id: string
+          vibration_enabled: boolean
+        }
+        Insert: {
+          created_at?: string
+          driver_updates?: boolean
+          id?: string
+          marketing?: boolean
+          order_updates?: boolean
+          promotions?: boolean
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          sound_enabled?: boolean
+          updated_at?: string
+          user_id: string
+          vibration_enabled?: boolean
+        }
+        Update: {
+          created_at?: string
+          driver_updates?: boolean
+          id?: string
+          marketing?: boolean
+          order_updates?: boolean
+          promotions?: boolean
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          sound_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+          vibration_enabled?: boolean
         }
         Relationships: []
       }
@@ -250,6 +393,42 @@ export type Database = {
           last_name?: string | null
           phone?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      push_notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          message: string
+          notification_type: string
+          read_at: string | null
+          sent_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message: string
+          notification_type: string
+          read_at?: string | null
+          sent_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message?: string
+          notification_type?: string
+          read_at?: string | null
+          sent_at?: string | null
+          title?: string
           user_id?: string
         }
         Relationships: []
@@ -398,6 +577,77 @@ export type Database = {
           notification_settings?: Json
           preferences?: Json
           privacy_settings?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wishlist_items: {
+        Row: {
+          added_at: string
+          id: string
+          item_data: Json
+          item_id: string
+          item_type: string
+          notes: string | null
+          priority: number | null
+          wishlist_id: string
+        }
+        Insert: {
+          added_at?: string
+          id?: string
+          item_data: Json
+          item_id: string
+          item_type: string
+          notes?: string | null
+          priority?: number | null
+          wishlist_id: string
+        }
+        Update: {
+          added_at?: string
+          id?: string
+          item_data?: Json
+          item_id?: string
+          item_type?: string
+          notes?: string | null
+          priority?: number | null
+          wishlist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlist_items_wishlist_id_fkey"
+            columns: ["wishlist_id"]
+            isOneToOne: false
+            referencedRelation: "wishlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wishlists: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          name?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          name?: string
           updated_at?: string
           user_id?: string
         }
