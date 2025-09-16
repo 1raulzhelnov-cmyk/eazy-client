@@ -55,6 +55,9 @@ const DriverApp = () => {
     if (user) {
       fetchDriverProfile();
       fetchDriverApplication();
+    } else {
+      // Нет авторизации — показываем форму регистрации курьера
+      setLoading(false);
     }
   }, [user]);
 
