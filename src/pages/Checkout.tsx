@@ -85,11 +85,8 @@ const Checkout = () => {
       }
 
       if (data?.url) {
-        // Clear cart before redirecting to payment
-        await clearCart();
-        
-        // Redirect to Stripe Checkout
-        window.location.href = data.url;
+        window.location.assign(data.url);
+        return;
       } else {
         throw new Error('Не удалось создать сессию оплаты');
       }

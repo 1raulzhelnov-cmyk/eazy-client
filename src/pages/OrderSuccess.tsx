@@ -6,11 +6,13 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle, Clock, MapPin, Phone, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
 const OrderSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { clearCart } = useCart();
   const [paymentData, setPaymentData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -34,6 +36,7 @@ const OrderSuccess = () => {
 
         if (data.payment_status === 'paid') {
           setPaymentData(data);
+          await clearCart();
         } else {
           toast({
             title: "Проблема с оплатой",
@@ -56,7 +59,7 @@ const OrderSuccess = () => {
     };
 
     verifyPayment();
-  }, [sessionId, navigate, toast]);
+  }, [sessionId, navigate, toast, clearCart]);
 
   if (isLoading) {
     return (
