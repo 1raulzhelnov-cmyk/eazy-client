@@ -520,13 +520,6 @@ export type Database = {
             foreignKeyName: "orders_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
-            referencedRelation: "driver_public_info"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "orders_driver_id_fkey"
-            columns: ["driver_id"]
-            isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
@@ -823,45 +816,7 @@ export type Database = {
       }
     }
     Views: {
-      driver_public_info: {
-        Row: {
-          first_name: string | null
-          id: string | null
-          is_active: boolean | null
-          is_verified: boolean | null
-          last_name_initial: string | null
-          rating: number | null
-          status: string | null
-          total_deliveries: number | null
-          user_id: string | null
-          vehicle_type: string | null
-        }
-        Insert: {
-          first_name?: string | null
-          id?: string | null
-          is_active?: boolean | null
-          is_verified?: boolean | null
-          last_name_initial?: never
-          rating?: number | null
-          status?: string | null
-          total_deliveries?: number | null
-          user_id?: string | null
-          vehicle_type?: string | null
-        }
-        Update: {
-          first_name?: string | null
-          id?: string | null
-          is_active?: boolean | null
-          is_verified?: boolean | null
-          last_name_initial?: never
-          rating?: number | null
-          status?: string | null
-          total_deliveries?: number | null
-          user_id?: string | null
-          vehicle_type?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       create_system_notification: {
@@ -874,6 +829,18 @@ export type Database = {
           target_user_id: string
         }
         Returns: string
+      }
+      get_driver_info_for_user_order: {
+        Args: { order_id_param: string }
+        Returns: {
+          driver_id: string
+          first_name: string
+          last_name_initial: string
+          rating: number
+          status: string
+          total_deliveries: number
+          vehicle_type: string
+        }[]
       }
       get_restaurant_reviews: {
         Args: { restaurant_id_param: string }
