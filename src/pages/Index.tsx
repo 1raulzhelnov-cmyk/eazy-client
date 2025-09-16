@@ -9,7 +9,11 @@ const Index = () => {
   const [appMode, setAppMode] = useState<'customer' | 'driver'>('customer');
 
   if (appMode === 'driver') {
-    return <DriverApp />;
+    return (
+      <div className="min-h-screen bg-background">
+        <DriverApp />
+      </div>
+    );
   }
 
   return (

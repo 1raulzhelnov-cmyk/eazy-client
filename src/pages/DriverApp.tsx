@@ -10,6 +10,8 @@ import { useToast } from '@/hooks/use-toast';
 import DriverRegistrationForm from '@/components/DriverRegistrationForm';
 import DriverApplicationStatus from '@/components/DriverApplicationStatus';
 import DriverOrderNotifications from '@/components/DriverOrderNotifications';
+import DriverEarningsPanel from '@/components/DriverEarningsPanel';
+import DriverCommunication from '@/components/DriverCommunication';
 
 interface Driver {
   id: string;
@@ -289,6 +291,18 @@ const DriverApp = () => {
       {driver && driver.status === 'online' && (
         <DriverOrderNotifications />
       )}
+
+      {/* Earnings Panel */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Заработки</h3>
+        <DriverEarningsPanel />
+      </div>
+
+      {/* Communication */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Общение</h3>
+        <DriverCommunication />
+      </div>
 
       {/* Orders */}
       <div className="space-y-4">
