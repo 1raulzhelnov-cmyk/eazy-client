@@ -466,9 +466,9 @@ const MenuManagement = () => {
                     <div key={category.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                          {category.image ? (
+                          {category.image_url ? (
                             <img 
-                              src={category.image} 
+                              src={category.image_url} 
                               alt={category.name}
                               className="w-full h-full object-cover rounded-lg"
                             />
@@ -479,19 +479,19 @@ const MenuManagement = () => {
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
                             <h4 className="font-medium">{category.name}</h4>
-                            <Badge variant={category.active ? "default" : "secondary"}>
-                              {category.active ? "Активна" : "Неактивна"}
+                            <Badge variant={category.is_active ? "default" : "secondary"}>
+                              {category.is_active ? "Активна" : "Неактивна"}
                             </Badge>
                           </div>
                           <p className="text-sm text-muted-foreground">{category.description}</p>
                           <p className="text-xs text-muted-foreground">
-                            {category.itemCount} блюд
+                            {category.item_count} блюд
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <Switch
-                          checked={category.active}
+                          checked={category.is_active}
                           onCheckedChange={() => toggleCategoryActive(category.id)}
                         />
                         <Button variant="outline" size="sm">
@@ -622,16 +622,16 @@ const MenuManagement = () => {
                         </div>
                         <div>
                           <p className="font-medium">{item.name}</p>
-                          <p className="text-sm text-muted-foreground">{item.category}</p>
+                          <p className="text-sm text-muted-foreground">{item.category_name}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <Badge variant={item.available ? "default" : "secondary"}>
-                          {item.available ? "Доступно" : "Недоступно"}
+                        <Badge variant={item.is_available ? "default" : "secondary"}>
+                          {item.is_available ? "Доступно" : "Недоступно"}
                         </Badge>
                         <Switch
-                          checked={item.available}
-                          onCheckedChange={() => toggleAvailability(item.id)}
+                          checked={item.is_available}
+                          onCheckedChange={() => toggleItemAvailability(item.id)}
                         />
                       </div>
                     </div>
