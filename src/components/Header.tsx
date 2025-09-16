@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import CartSheet from "@/components/CartSheet";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -11,6 +12,9 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
     { path: "/restaurants", label: "Рестораны", icon: "🍽️" },
@@ -23,7 +27,33 @@ const Header = () => {
     navigate('/');
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/restaurants?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      setShowSearchResults(false);
+    }
+  };
+
   const userInitials = profile ? `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase() : '';
+
+  // Hide search results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Quick search suggestions
+  const quickSearches = [
+    "Пицца", "Суши", "Бургеры", "Кофе", "Салаты", "Десерты"
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b">
@@ -64,12 +94,43 @@ const Header = () => {
           </div>
 
           {/* Search */}
-          <div className="flex-1 max-w-md relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input
-              placeholder="Найти рестораны, цветы, шары..."
-              className="pl-10 bg-muted/50"
-            />
+          <div className="flex-1 max-w-md relative" ref={searchRef}>
+            <form onSubmit={handleSearch}>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                <Input
+                  placeholder="Найти рестораны, цветы, шары..."
+                  className="pl-10 bg-muted/50"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setShowSearchResults(true)}
+                />
+              </div>
+            </form>
+
+            {/* Quick Search Dropdown */}
+            {showSearchResults && searchQuery.length === 0 && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 p-2">
+                <div className="text-xs text-muted-foreground mb-2 px-2">Популярные запросы:</div>
+                <div className="flex flex-wrap gap-1">
+                  {quickSearches.map((term) => (
+                    <Button
+                      key={term}
+                      variant="ghost"
+                      size="sm"
+                      className="h-auto py-1 px-2 text-xs"
+                      onClick={() => {
+                        setSearchQuery(term);
+                        navigate(`/restaurants?search=${encodeURIComponent(term)}`);
+                        setShowSearchResults(false);
+                      }}
+                    >
+                      {term}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Actions */}
