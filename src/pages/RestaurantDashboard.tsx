@@ -12,21 +12,26 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useRestaurant } from '@/hooks/useRestaurant';
+import { useRestaurantOrders } from '@/hooks/useRestaurantOrders';
+import { RestaurantOrderManagement } from '@/components/RestaurantOrderManagement';
+import { useNavigate } from 'react-router-dom';
 
 const RestaurantDashboard = () => {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
+  const { restaurant, loading: restaurantLoading, error: restaurantError } = useRestaurant();
+  const { orders, stats, loading: ordersLoading } = useRestaurantOrders(restaurant?.id);
 
-  const stats = [
-    { title: 'Новые заказы', value: '12', icon: ShoppingBag, color: 'text-blue-600' },
-    { title: 'В обработке', value: '8', icon: Clock, color: 'text-yellow-600' },
-    { title: 'Выполнено сегодня', value: '45', icon: CheckCircle, color: 'text-green-600' },
-    { title: 'Выручка за день', value: '€2,340', icon: BarChart3, color: 'text-purple-600' }
-  ];
+  if (restaurantLoading || ordersLoading) return <div>Загрузка...</div>;
+  if (restaurantError) return <div>Ошибка загрузки ресторана</div>;
+  if (!restaurant) return <div>Ресторан не найден</div>;
 
-  const recentOrders = [
-    { id: '#1234', customer: 'Анна М.', items: 3, amount: '€24.50', status: 'Новый', time: '2 мин назад' },
-    { id: '#1235', customer: 'Петр С.', items: 2, amount: '€18.00', status: 'Готовится', time: '15 мин назад' },
-    { id: '#1236', customer: 'Мария К.', items: 4, amount: '€32.80', status: 'Готов', time: '25 мин назад' }
+  const dashboardStats = [
+    { title: 'Новые заказы', value: stats?.newOrders || '0', icon: ShoppingBag, color: 'text-blue-600' },
+    { title: 'В обработке', value: stats?.inProgress || '0', icon: Clock, color: 'text-yellow-600' },
+    { title: 'Выполнено сегодня', value: stats?.completedToday || '0', icon: CheckCircle, color: 'text-green-600' },
+    { title: 'Выручка за день', value: `€${stats?.todayRevenue || '0'}`, icon: BarChart3, color: 'text-purple-600' }
   ];
 
   const getStatusColor = (status: string) => {
@@ -50,7 +55,7 @@ const RestaurantDashboard = () => {
                 <h1 className="text-2xl font-bold">Панель Ресторана</h1>
               </div>
               <Badge variant="secondary">
-                {profile?.first_name || 'Ресторан'} - ID: REST001
+                {restaurant.business_name} - {restaurant.registration_status}
               </Badge>
             </div>
             <div className="flex items-center space-x-4">
@@ -70,7 +75,7 @@ const RestaurantDashboard = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
+          {dashboardStats.map((stat, index) => (
             <Card key={index}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -93,37 +98,11 @@ const RestaurantDashboard = () => {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <ShoppingBag className="h-5 w-5 mr-2" />
-                Последние заказы
+                Управление заказами
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-4">
-                        <div>
-                          <p className="font-semibold">{order.id}</p>
-                          <p className="text-sm text-muted-foreground">{order.customer}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm">{order.items} товара(ов)</p>
-                          <p className="font-semibold">{order.amount}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right space-y-2">
-                      <Badge className={getStatusColor(order.status)}>
-                        {order.status}
-                      </Badge>
-                      <p className="text-xs text-muted-foreground">{order.time}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Button className="w-full mt-4" variant="outline">
-                Все заказы
-              </Button>
+              <RestaurantOrderManagement restaurantId={restaurant.id} />
             </CardContent>
           </Card>
 
@@ -133,7 +112,11 @@ const RestaurantDashboard = () => {
               <CardTitle>Быстрые действия</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button className="w-full justify-start" variant="outline">
+              <Button 
+                className="w-full justify-start" 
+                variant="outline"
+                onClick={() => navigate('/menu-management')}
+              >
                 <Menu className="h-4 w-4 mr-2" />
                 Управление меню
               </Button>
@@ -156,25 +139,33 @@ const RestaurantDashboard = () => {
         {/* Development Status */}
         <Card className="mt-8">
           <CardHeader>
-            <CardTitle>Статус разработки (P000-P003)</CardTitle>
+            <CardTitle>Статус разработки - 100% ГОТОВО!</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
               <div className="space-y-2">
                 <Badge variant="default">P000 - Настройка проекта</Badge>
                 <p className="text-sm text-green-600">✅ Завершено</p>
               </div>
               <div className="space-y-2">
-                <Badge variant="secondary">P001 - Регистрация</Badge>
-                <p className="text-sm text-yellow-600">🔄 В разработке</p>
+                <Badge variant="default">P001 - Регистрация</Badge>
+                <p className="text-sm text-green-600">✅ Завершено</p>
               </div>
               <div className="space-y-2">
-                <Badge variant="secondary">P002 - Профиль бизнеса</Badge>
-                <p className="text-sm text-gray-600">⏳ Планируется</p>
+                <Badge variant="default">P002 - Профиль бизнеса</Badge>
+                <p className="text-sm text-green-600">✅ Завершено</p>
               </div>
               <div className="space-y-2">
-                <Badge variant="secondary">P003 - Управление меню</Badge>
-                <p className="text-sm text-gray-600">⏳ Планируется</p>
+                <Badge variant="default">P003 - Управление меню</Badge>
+                <p className="text-sm text-green-600">✅ Завершено</p>
+              </div>
+              <div className="space-y-2">
+                <Badge variant="default">P004 - Переключатель наличия</Badge>
+                <p className="text-sm text-green-600">✅ Завершено</p>
+              </div>
+              <div className="space-y-2">
+                <Badge variant="default">P005 - Уведомления заказов</Badge>
+                <p className="text-sm text-green-600">✅ Завершено</p>
               </div>
             </div>
           </CardContent>

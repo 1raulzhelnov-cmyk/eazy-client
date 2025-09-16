@@ -33,39 +33,8 @@ import {
   ChefHat,
   Tag
 } from 'lucide-react';
-
-interface MenuItem {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  discountPercent?: number;
-  images: string[];
-  available: boolean;
-  preparationTime: number;
-  popular: boolean;
-  ingredients: string[];
-  nutritionalInfo?: {
-    calories: number;
-    protein: number;
-    carbs: number;
-    fat: number;
-  };
-  allergens: string[];
-  tags: string[];
-}
-
-interface Category {
-  id: string;
-  name: string;
-  description: string;
-  image?: string;
-  sortOrder: number;
-  active: boolean;
-  itemCount: number;
-}
+import { useMenuManagement, MenuItem, MenuCategory } from '@/hooks/useMenuManagement';
+import { useToast } from '@/hooks/use-toast';
 
 const MenuManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -73,86 +42,36 @@ const MenuManagement = () => {
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const { toast } = useToast();
 
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
-    {
-      id: '1',
-      name: 'Маргарита',
-      category: 'Пицца',
-      description: 'Классическая пицца с томатами, моцареллой и базиликом',
-      price: 12.50,
-      originalPrice: 15.00,
-      discountPercent: 17,
-      images: [],
-      available: true,
-      preparationTime: 15,
-      popular: true,
-      ingredients: ['тесто', 'томатный соус', 'моцарелла', 'базилик'],
-      allergens: ['глютен', 'молочные продукты'],
-      tags: ['вегетарианская', 'классическая']
-    },
-    {
-      id: '2',
-      name: 'Пепперони',
-      category: 'Пицца',
-      description: 'Пицца с пепперони и сыром моцарелла',
-      price: 14.90,
-      images: [],
-      available: true,
-      preparationTime: 15,
-      popular: true,
-      ingredients: ['тесто', 'томатный соус', 'моцарелла', 'пепперони'],
-      allergens: ['глютен', 'молочные продукты'],
-      tags: ['мясная', 'острая']
-    },
-    {
-      id: '3',
-      name: 'Цезарь',
-      category: 'Салаты',
-      description: 'Салат с курицей, сыром пармезан и соусом цезарь',
-      price: 8.50,
-      images: [],
-      available: false,
-      preparationTime: 10,
-      popular: false,
-      ingredients: ['салат айсберг', 'курица', 'пармезан', 'соус цезарь', 'сухарики'],
-      allergens: ['глютен', 'молочные продукты', 'яйца'],
-      tags: ['с мясом', 'салат']
-    }
-  ]);
-
-  const [categories, setCategories] = useState<Category[]>([
-    { id: '1', name: 'Пицца', description: 'Традиционные и авторские пиццы', sortOrder: 1, active: true, itemCount: 2 },
-    { id: '2', name: 'Салаты', description: 'Свежие салаты и закуски', sortOrder: 2, active: true, itemCount: 1 },
-    { id: '3', name: 'Напитки', description: 'Горячие и холодные напитки', sortOrder: 3, active: true, itemCount: 0 },
-    { id: '4', name: 'Десерты', description: 'Сладкие десерты', sortOrder: 4, active: false, itemCount: 0 },
-    { id: '5', name: 'Супы', description: 'Горячие супы', sortOrder: 5, active: true, itemCount: 0 }
-  ]);
+  const {
+    menuItems,
+    categories,
+    loading,
+    error,
+    createCategory,
+    createMenuItem,
+    updateMenuItem,
+    toggleItemAvailability,
+    toggleCategoryActive,
+    deleteMenuItem
+  } = useMenuManagement();
   
   const filteredItems = menuItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || item.category_name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const toggleAvailability = (id: string) => {
-    setMenuItems(prev => prev.map(item => 
-      item.id === id ? { ...item, available: !item.available } : item
-    ));
-  };
-
-  const toggleCategoryActive = (id: string) => {
-    setCategories(prev => prev.map(cat => 
-      cat.id === id ? { ...cat, active: !cat.active } : cat
-    ));
-  };
+  if (loading) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка: {error}</div>;
 
   const stats = {
     totalItems: menuItems.length,
-    availableItems: menuItems.filter(item => item.available).length,
-    popularItems: menuItems.filter(item => item.popular).length,
-    avgPrice: menuItems.reduce((sum, item) => sum + item.price, 0) / menuItems.length,
-    discountedItems: menuItems.filter(item => item.discountPercent).length
+    availableItems: menuItems.filter(item => item.is_available).length,
+    popularItems: menuItems.filter(item => item.is_popular).length,
+    avgPrice: menuItems.length > 0 ? menuItems.reduce((sum, item) => sum + item.price, 0) / menuItems.length : 0,
+    discountedItems: menuItems.filter(item => item.discount_percent && item.discount_percent > 0).length
   };
 
   return (
@@ -224,7 +143,7 @@ const MenuManagement = () => {
                             <SelectValue placeholder="Выберите категорию" />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.filter(cat => cat.active).map(category => (
+                          {categories.filter(cat => cat.is_active).map(category => (
                               <SelectItem key={category.id} value={category.name}>
                                 {category.name}
                               </SelectItem>
@@ -402,14 +321,14 @@ const MenuManagement = () => {
                     >
                       Все ({menuItems.length})
                     </Button>
-                    {categories.filter(cat => cat.active).map(category => (
+                    {categories.filter(cat => cat.is_active).map(category => (
                       <Button
                         key={category.id}
                         variant={selectedCategory === category.name ? 'default' : 'outline'}
                         onClick={() => setSelectedCategory(category.name)}
                         size="sm"
                       >
-                        {category.name} ({category.itemCount})
+                        {category.name} ({category.item_count})
                       </Button>
                     ))}
                   </div>
@@ -420,7 +339,7 @@ const MenuManagement = () => {
             {/* Enhanced Menu Items */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredItems.map((item) => (
-                <Card key={item.id} className={!item.available ? 'opacity-60' : ''}>
+                <Card key={item.id} className={!item.is_available ? 'opacity-60' : ''}>
                   <CardContent className="p-0">
                     <div className="aspect-video bg-gray-100 rounded-t-lg flex items-center justify-center relative">
                       {item.images.length > 0 ? (
@@ -432,12 +351,12 @@ const MenuManagement = () => {
                       ) : (
                         <Image className="h-12 w-12 text-gray-400" />
                       )}
-                      {item.discountPercent && (
+                      {item.discount_percent && (
                         <Badge className="absolute top-2 right-2 bg-red-500">
-                          -{item.discountPercent}%
+                          -{item.discount_percent}%
                         </Badge>
                       )}
-                      {!item.available && (
+                      {!item.is_available && (
                         <Badge className="absolute top-2 left-2 bg-gray-500">
                           Недоступно
                         </Badge>
@@ -447,13 +366,13 @@ const MenuManagement = () => {
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <h3 className="font-semibold">{item.name}</h3>
-                          <Badge variant="secondary" className="mb-2">{item.category}</Badge>
+                          <Badge variant="secondary" className="mb-2">{item.category_name}</Badge>
                         </div>
                         <div className="flex items-center space-x-2">
-                          {item.popular && <Star className="h-4 w-4 text-yellow-500" />}
+                          {item.is_popular && <Star className="h-4 w-4 text-yellow-500" />}
                           <Switch
-                            checked={item.available}
-                            onCheckedChange={() => toggleAvailability(item.id)}
+                            checked={item.is_available}
+                            onCheckedChange={() => toggleItemAvailability(item.id)}
                           />
                         </div>
                       </div>
@@ -465,15 +384,15 @@ const MenuManagement = () => {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-2">
                           <span className="text-lg font-bold">€{item.price.toFixed(2)}</span>
-                          {item.originalPrice && (
+                          {item.original_price && (
                             <span className="text-sm text-muted-foreground line-through">
-                              €{item.originalPrice.toFixed(2)}
+                              €{item.original_price.toFixed(2)}
                             </span>
                           )}
                         </div>
                         <div className="flex items-center text-sm text-muted-foreground">
                           <Clock className="h-4 w-4 mr-1" />
-                          {item.preparationTime} мин
+                          {item.preparation_time} мин
                         </div>
                       </div>
 
