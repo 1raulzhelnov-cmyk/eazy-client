@@ -8,3 +8,42 @@ verify_jwt = false
 
 [functions.generate-recommendations]
 verify_jwt = false
+
+[functions.approve-driver-application]
+verify_jwt = false
+
+[functions.advanced-search]
+verify_jwt = false
+
+[functions.enhanced-payment-processing]
+verify_jwt = false
+
+[functions.delivery-management]
+verify_jwt = false
+
+[functions.geolocation-services]
+verify_jwt = false
+
+[functions.notification-system]
+verify_jwt = false
+
+[functions.analytics-reporting]
+verify_jwt = false
+
+[functions.user-management-api]
+verify_jwt = false
+
+[functions.restaurant-management-api]
+verify_jwt = false
+
+[functions.order-processing-api]
+verify_jwt = false
+
+[functions.real-time-communication]
+verify_jwt = false
+
+[functions.file-upload-service]
+verify_jwt = false
+
+[functions.driver-management-api]
+verify_jwt = false
