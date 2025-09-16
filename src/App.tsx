@@ -38,6 +38,12 @@ import RestaurantPersonnel from "./pages/RestaurantPersonnel";
 import AdminDashboard from "./pages/AdminDashboard";
 import FinanceManagement from "./pages/admin/FinanceManagement";
 import ContentManagement from "./pages/admin/ContentManagement";
+import UsersManagement from "./pages/admin/UsersManagement";
+import RestaurantsManagement from "./pages/admin/RestaurantsManagement";
+import DriversManagement from "./pages/admin/DriversManagement";
+import DisputesManagement from "./pages/admin/DisputesManagement";
+import CampaignsManagement from "./pages/admin/CampaignsManagement";
+import ReportsAnalytics from "./pages/admin/ReportsAnalytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,9 +87,15 @@ const App = () => (
               <Route path="/restaurant-personnel" element={<RestaurantPersonnel />} />
               
               {/* Admin Panel */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/finances" element={<FinanceManagement />} />
-              <Route path="/admin/content" element={<ContentManagement />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/finances" element={<FinanceManagement />} />
+        <Route path="/admin/content" element={<ContentManagement />} />
+        <Route path="/admin/users" element={<UsersManagement />} />
+        <Route path="/admin/restaurants" element={<RestaurantsManagement />} />
+        <Route path="/admin/drivers" element={<DriversManagement />} />
+        <Route path="/admin/disputes" element={<DisputesManagement />} />
+        <Route path="/admin/campaigns" element={<CampaignsManagement />} />
+        <Route path="/admin/reports" element={<ReportsAnalytics />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
