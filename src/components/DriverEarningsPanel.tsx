@@ -29,7 +29,11 @@ interface DeliveryStats {
   hours: number;
 }
 
-const DriverEarningsPanel = () => {
+interface DriverEarningsPanelProps {
+  demoMode?: boolean;
+}
+
+const DriverEarningsPanel = ({ demoMode = false }: DriverEarningsPanelProps) => {
   const { user } = useAuth();
   const [earnings, setEarnings] = useState<EarningsData>({
     totalEarnings: 0,
@@ -48,11 +52,24 @@ const DriverEarningsPanel = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (demoMode) {
+      // Загружаем демо данные
+      setEarnings({
+        totalEarnings: 486.50,
+        todayEarnings: 65.20,
+        weekEarnings: 324.80,
+        monthEarnings: 486.50,
+        totalDeliveries: 45,
+        todayDeliveries: 6,
+        avgRating: 4.8,
+        hoursWorked: 7
+      });
+      setLoading(false);
+    } else if (user) {
       fetchEarningsData();
       fetchDailyStats();
     }
-  }, [user, selectedDate, period]);
+  }, [user, selectedDate, period, demoMode]);
 
   const fetchEarningsData = async () => {
     try {

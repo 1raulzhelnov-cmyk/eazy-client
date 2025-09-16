@@ -468,13 +468,13 @@ const DriverApp = () => {
       {/* Earnings Panel */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Заработки</h3>
-        <DriverEarningsPanel />
+        <DriverEarningsPanel demoMode={demoMode} />
       </div>
 
       {/* Communication */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Общение</h3>
-        <DriverCommunication />
+        <DriverCommunication demoMode={demoMode} />
       </div>
 
       {/* Orders */}

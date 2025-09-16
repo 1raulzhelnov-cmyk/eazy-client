@@ -30,7 +30,11 @@ interface Message {
   message_type: string;
 }
 
-const DriverCommunication = () => {
+interface DriverCommunicationProps {
+  demoMode?: boolean;
+}
+
+const DriverCommunication = ({ demoMode = false }: DriverCommunicationProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [chats, setChats] = useState<Chat[]>([]);
@@ -40,17 +44,67 @@ const DriverCommunication = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (demoMode) {
+      // Создаем демо чаты
+      const demoChats: Chat[] = [
+        {
+          id: 'demo-chat-1',
+          order_id: 'demo-order-1',
+          type: 'order',
+          status: 'active',
+          last_message_at: new Date().toISOString(),
+          order: {
+            order_number: 'ORD-DEMO-001',
+            customer_info: { name: 'Мария Иванова' }
+          }
+        },
+        {
+          id: 'demo-chat-support',
+          order_id: null,
+          type: 'support',
+          status: 'active',
+          last_message_at: new Date(Date.now() - 3600000).toISOString()
+        }
+      ];
+      setChats(demoChats);
+      setLoading(false);
+    } else if (user) {
       fetchActiveChats();
     }
-  }, [user]);
+  }, [user, demoMode]);
 
   useEffect(() => {
-    if (selectedChat) {
+    if (selectedChat && !demoMode) {
       fetchMessages(selectedChat.id);
       subscribeToMessages(selectedChat.id);
+    } else if (selectedChat && demoMode) {
+      // Создаем демо сообщения
+      const demoMessages: Message[] = [
+        {
+          id: 'demo-msg-1',
+          content: 'Здравствуйте! Я ваш курьер.',
+          sender_type: 'driver',
+          created_at: new Date(Date.now() - 900000).toISOString(),
+          message_type: 'text'
+        },
+        {
+          id: 'demo-msg-2',
+          content: 'Спасибо! Буду ждать у подъезда.',
+          sender_type: 'customer',
+          created_at: new Date(Date.now() - 600000).toISOString(),
+          message_type: 'text'
+        },
+        {
+          id: 'demo-msg-3',
+          content: 'Уже подъезжаю, буду через 5 минут.',
+          sender_type: 'driver',
+          created_at: new Date(Date.now() - 300000).toISOString(),
+          message_type: 'text'
+        }
+      ];
+      setMessages(demoMessages);
     }
-  }, [selectedChat]);
+  }, [selectedChat, demoMode]);
 
   const fetchActiveChats = async () => {
     try {
@@ -140,7 +194,37 @@ const DriverCommunication = () => {
   };
 
   const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedChat || !user) return;
+    if (!newMessage.trim() || !selectedChat) return;
+
+    if (demoMode) {
+      // В демо режиме добавляем сообщение локально
+      const demoMessage: Message = {
+        id: `demo-msg-${Date.now()}`,
+        content: newMessage,
+        sender_type: 'driver',
+        created_at: new Date().toISOString(),
+        message_type: 'text'
+      };
+      
+      setMessages(prev => [...prev, demoMessage]);
+      setNewMessage('');
+      
+      // Имитируем ответ через 2 секунды
+      setTimeout(() => {
+        const responseMessage: Message = {
+          id: `demo-response-${Date.now()}`,
+          content: 'Понял, спасибо за информацию!',
+          sender_type: 'customer',
+          created_at: new Date().toISOString(),
+          message_type: 'text'
+        };
+        setMessages(prev => [...prev, responseMessage]);
+      }, 2000);
+      
+      return;
+    }
+
+    if (!user) return;
 
     try {
       const { error } = await supabase
@@ -278,7 +362,7 @@ const DriverCommunication = () => {
                   </Badge>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {formatTime(chat.last_message_at)}
+                  {chat.last_message_at ? formatTime(chat.last_message_at) : 'Нет сообщений'}
                 </p>
               </div>
             ))
