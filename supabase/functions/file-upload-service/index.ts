@@ -3,8 +3,11 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Origin': '*', // TODO: Restrict to specific domains in production
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-requested-with',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY'
 };
 
 serve(async (req) => {
@@ -60,13 +63,13 @@ serve(async (req) => {
         });
       }
 
-      // Validate file type and size
+      // Enhanced file validation with signature checking
       const maxSize = 10 * 1024 * 1024; // 10MB
-      const allowedTypes = [
+      const allowedTypes = new Set([
         'image/jpeg', 'image/png', 'image/webp', 'image/gif',
         'application/pdf', 'text/plain', 'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      ];
+      ]);
 
       if (file.size > maxSize) {
         return new Response(JSON.stringify({ error: 'File too large. Maximum size is 10MB' }), {
@@ -75,27 +78,54 @@ serve(async (req) => {
         });
       }
 
-      if (!allowedTypes.includes(file.type)) {
+      if (!allowedTypes.has(file.type)) {
         return new Response(JSON.stringify({ error: 'File type not allowed' }), {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
 
-      // Generate unique filename
+      // Validate file signatures to prevent spoofed MIME types
+      const fileBuffer = await file.arrayBuffer();
+      const uint8Array = new Uint8Array(fileBuffer);
+      const signature = Array.from(uint8Array.slice(0, 4)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+      const isValidSignature = () => {
+        if (file.type.includes('jpeg') || file.type.includes('jpg')) {
+          return signature.startsWith('ffd8ff'); // JPEG signature
+        }
+        if (file.type === 'image/png') {
+          return signature === '89504e47'; // PNG signature
+        }
+        if (file.type === 'application/pdf') {
+          return signature === '25504446'; // PDF signature
+        }
+        return true; // Allow other validated types without signature check
+      };
+
+      if (!isValidSignature()) {
+        return new Response(JSON.stringify({ error: 'Invalid file signature. File may be corrupted or spoofed.' }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Generate secure filename with user isolation
       const timestamp = Date.now();
       const randomId = Math.random().toString(36).substring(2);
       const extension = file.name.split('.').pop();
-      const fileName = `${timestamp}_${randomId}.${extension}`;
+      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const fileName = `${user.id}/${timestamp}_${randomId}_${sanitizedName}`;
       
       const filePath = folder ? `${folder}/${fileName}` : fileName;
 
-      // Upload to Supabase Storage
+      // Upload to Supabase Storage with security headers
       const { data, error } = await supabase.storage
         .from(bucket)
-        .upload(filePath, file, {
+        .upload(filePath, fileBuffer, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false, // Prevent overwriting for security
+          contentType: file.type
         });
 
       if (error) {
