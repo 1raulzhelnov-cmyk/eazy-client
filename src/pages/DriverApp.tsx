@@ -50,16 +50,61 @@ const DriverApp = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [currentNavigation, setCurrentNavigation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [demoMode, setDemoMode] = useState(false);
 
   useEffect(() => {
     if (user) {
       fetchDriverProfile();
       fetchDriverApplication();
     } else {
-      // Нет авторизации — показываем форму регистрации курьера
-      setLoading(false);
+      // Включаем демо режим для неавторизованных пользователей
+      loadDemoData();
     }
   }, [user]);
+
+  const loadDemoData = () => {
+    // Создаем демонстрационные данные водителя
+    const demoDriver: Driver = {
+      id: 'demo-driver-id',
+      first_name: 'Алексей',
+      last_name: 'Демо',
+      phone: '+372 5555555',
+      email: 'demo.driver@eazy.ee',
+      vehicle_type: 'car',
+      license_plate: 'ABC123',
+      status: 'offline', 
+      rating: 4.8,
+      total_deliveries: 45,
+      is_verified: true
+    };
+
+    // Создаем демонстрационный заказ
+    const demoOrder: Order = {
+      id: 'demo-order-id',
+      order_number: 'ORD-DEMO-001',
+      status: 'assigned',
+      total_amount: 24.50,
+      customer_info: { name: 'Мария Иванова', phone: '+372 1234567' },
+      delivery_address: {
+        address_line_1: 'Пушкина ул. 15, кв. 23',
+        city: 'Нарва',
+        postal_code: '20308',
+        latitude: 59.3776,
+        longitude: 28.1907
+      },
+      items: [
+        { name: 'Пицца Маргарита', quantity: 1, price: 12.50, restaurant: 'Pizza Palace' },
+        { name: 'Кола 0.5л', quantity: 2, price: 6.00, restaurant: 'Pizza Palace' }
+      ],
+      estimated_delivery_time: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+      created_at: new Date().toISOString()
+    };
+
+    setDriver(demoDriver);
+    setOrders([demoOrder]);
+    setDemoMode(true);
+    setLoading(false);
+  };
 
   const fetchDriverProfile = async () => {
     try {
@@ -128,7 +173,17 @@ const DriverApp = () => {
   };
 
   const toggleOnlineStatus = async () => {
-    if (!driver) return;
+    if (!driver || demoMode) {
+      if (demoMode) {
+        const newStatus = driver.status === 'online' ? 'offline' : 'online';
+        setDriver({ ...driver, status: newStatus });
+        toast({
+          title: "Демо режим",
+          description: `Статус изменен на ${newStatus === 'online' ? 'онлайн' : 'оффлайн'} (демонстрация)`,
+        });
+      }
+      return;
+    }
 
     const newStatus = driver.status === 'online' ? 'offline' : 'online';
     
@@ -158,6 +213,40 @@ const DriverApp = () => {
   };
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    if (demoMode) {
+      // В демо режиме просто обновляем локальное состояние
+      const updatedOrders = orders.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      );
+      setOrders(updatedOrders);
+      
+      if (newStatus === 'in_delivery') {
+        const order = orders.find(o => o.id === orderId);
+        if (order) {
+          setCurrentNavigation({
+            destination: {
+              address: order.delivery_address.address_line_1,
+              lat: order.delivery_address.latitude,
+              lng: order.delivery_address.longitude
+            },
+            orderInfo: {
+              order_number: order.order_number,
+              customer_name: order.customer_info?.name,
+              customer_phone: order.customer_info?.phone,
+              type: 'delivery'
+            }
+          });
+        }
+      } else if (newStatus === 'delivered') {
+        setCurrentNavigation(null);
+      }
+      
+      toast({
+        title: "Демо режим",
+        description: "Статус заказа обновлен (демонстрация)",
+      });
+      return;
+    }
     try {
       const updates: any = { status: newStatus };
       
@@ -269,7 +358,7 @@ const DriverApp = () => {
     );
   }
 
-  if (!driver && !application) {
+  if (!driver && !application && !demoMode) {
     return (
       <div className="min-h-screen bg-background p-4">
         <DriverRegistrationForm />
@@ -277,7 +366,7 @@ const DriverApp = () => {
     );
   }
 
-  if (!driver && application) {
+  if (!driver && application && !demoMode) {
     return (
       <div className="min-h-screen bg-background p-4">
         <div className="max-w-2xl mx-auto">
@@ -289,6 +378,15 @@ const DriverApp = () => {
 
   return (
     <div className="min-h-screen bg-background p-4 space-y-6">
+      {/* Demo Mode Banner */}
+      {demoMode && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg">
+          <p className="text-sm font-medium">
+            🚀 Демонстрационный режим - Вы можете взаимодействовать с интерфейсом курьера
+          </p>
+        </div>
+      )}
+      
       {/* Header */}
       <Card>
         <CardContent className="pt-6">
