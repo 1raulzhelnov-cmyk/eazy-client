@@ -29,6 +29,12 @@ import RestaurantDashboard from "./pages/RestaurantDashboard";
 import RestaurantRegistration from "./pages/RestaurantRegistration";
 import RestaurantProfile from "./pages/RestaurantProfile";
 import MenuManagement from "./pages/MenuManagement";
+import RestaurantAnalytics from "./pages/RestaurantAnalytics";
+import RestaurantReviews from "./pages/RestaurantReviews";
+import RestaurantSupport from "./pages/RestaurantSupport";
+import RestaurantFinances from "./pages/RestaurantFinances";
+import RestaurantPromotions from "./pages/RestaurantPromotions";
+import RestaurantPersonnel from "./pages/RestaurantPersonnel";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +70,12 @@ const App = () => (
               <Route path="/restaurant-registration" element={<RestaurantRegistration />} />
               <Route path="/restaurant-profile" element={<RestaurantProfile />} />
               <Route path="/menu-management" element={<MenuManagement />} />
+              <Route path="/restaurant-analytics" element={<RestaurantAnalytics />} />
+              <Route path="/restaurant-reviews" element={<RestaurantReviews />} />
+              <Route path="/restaurant-support" element={<RestaurantSupport />} />
+              <Route path="/restaurant-finances" element={<RestaurantFinances />} />
+              <Route path="/restaurant-promotions" element={<RestaurantPromotions />} />
+              <Route path="/restaurant-personnel" element={<RestaurantPersonnel />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
