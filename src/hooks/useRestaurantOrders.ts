@@ -188,6 +188,9 @@ export const useRestaurantOrders = (restaurantId?: string) => {
       return () => {
         subscription.unsubscribe();
       };
+    } else {
+      // If no restaurant ID, set loading to false immediately
+      setLoading(false);
     }
   }, [restaurantId]);
 
