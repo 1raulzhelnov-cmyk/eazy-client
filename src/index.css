@@ -8,54 +8,54 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Pink delivery theme colors */
-    --background: 350 100% 99%;
-    --foreground: 222.2 84% 4.9%;
+    /* Warm pastel pink theme colors */
+    --background: 10 20% 98%;
+    --foreground: 25 15% 25%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 15 25% 97%;
+    --card-foreground: 25 15% 25%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 15 25% 97%;
+    --popover-foreground: 25 15% 25%;
 
-    /* Beautiful pink-themed primary colors */
-    --primary: 330 85% 60%;
+    /* Soft pastel pink primary colors */
+    --primary: 340 45% 75%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 340 100% 75%;
+    --primary-glow: 345 50% 85%;
 
-    --secondary: 320 70% 50%;
+    --secondary: 335 40% 70%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 350 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 20 25% 94%;
+    --muted-foreground: 25 15% 55%;
 
-    --accent: 310 80% 65%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 320 35% 80%;
+    --accent-foreground: 25 15% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 350 31.8% 91.4%;
-    --input: 350 31.8% 91.4%;
-    --ring: 330 85% 60%;
+    --border: 20 20% 88%;
+    --input: 20 20% 88%;
+    --ring: 340 45% 75%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Pink delivery specific colors */
-    --pink-primary: 330 85% 60%;
-    --pink-secondary: 320 70% 50%;
-    --pink-accent: 310 80% 65%;
-    --pink-light: 340 100% 95%;
-    --star-yellow: 43 96% 56%;
+    /* Warm pastel specific colors */
+    --pink-primary: 340 45% 75%;
+    --pink-secondary: 335 40% 70%;
+    --pink-accent: 320 35% 80%;
+    --pink-light: 345 35% 92%;
+    --star-yellow: 40 80% 65%;
 
-    /* Pink gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(310 80% 65%));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    /* Soft gradients */
+    --gradient-primary: linear-gradient(120deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-secondary: linear-gradient(120deg, hsl(var(--secondary)), hsl(320 35% 80%));
+    --gradient-hero: linear-gradient(120deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
 
-    /* Pink shadows */
-    --shadow-card: 0 4px 20px -2px hsl(var(--primary) / 0.15);
-    --shadow-glow: 0 8px 32px -8px hsl(var(--primary) / 0.3);
+    /* Soft shadows */
+    --shadow-card: 0 2px 12px -1px hsl(var(--primary) / 0.08);
+    --shadow-glow: 0 4px 24px -4px hsl(var(--primary) / 0.12);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -108,5 +108,24 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities for more human-like design */
+  .organic-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+  }
+  
+  .subtle-border {
+    @apply border border-border/60;
+  }
+  
+  .natural-rounded {
+    @apply rounded-xl;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
   }
 }

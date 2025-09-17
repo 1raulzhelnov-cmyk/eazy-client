@@ -50,70 +50,85 @@ const Index = () => {
       </div>
       
       {/* Hero Section */}
-      <section className="bg-gradient-hero text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Добро пожаловать в 
-            <span className="text-primary-glow"> Eazy</span>
-          </h1>
-          <p className="text-xl mb-8 opacity-90">
-            Доставка еды, цветов и шаров в Нарву за 30 минут
-          </p>
-          <p className="text-lg mb-10 opacity-80">
-            Выберите категорию и начните делать заказы прямо сейчас!
-          </p>
+      <section className="relative bg-gradient-hero text-white py-16 md:py-24 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-20 h-20 rounded-full bg-white/20"></div>
+          <div className="absolute top-32 right-20 w-8 h-8 rounded-full bg-white/15"></div>
+          <div className="absolute bottom-16 left-1/4 w-12 h-12 rounded-full bg-white/10"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+              Добро пожаловать в 
+              <span className="inline-block ml-2 text-primary-glow transform -rotate-1"> Eazy</span>
+            </h1>
+            <div className="space-y-3 mb-8">
+              <p className="text-lg md:text-xl opacity-95">
+                Доставка еды, цветов и шаров в Нарву за 30 минут
+              </p>
+              <p className="text-base md:text-lg opacity-85 max-w-2xl mx-auto">
+                Выберите категорию и начните делать заказы прямо сейчас!
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Categories */}
-      <section className="py-16">
+      <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Что вы хотите заказать?</h2>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">Что вы хотите заказать?</h2>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Свежие продукты, красивые цветы и праздничные шары
+            </p>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
             {/* Restaurants */}
-            <Link to="/restaurants">
-              <Card className="group cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-8 text-center">
-                <div className="text-6xl mb-4">🍽️</div>
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+            <Link to="/restaurants" className="group">
+              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
+                <div className="text-5xl md:text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">🍽️</div>
+                <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Рестораны
                 </h3>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
                   Лучшие рестораны города с бесплатной доставкой
                 </p>
-                <Button className="w-full bg-gradient-primary hover:shadow-glow">
+                <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
                   Заказать еду
                 </Button>
               </Card>
             </Link>
 
             {/* Flowers */}
-            <Link to="/flowers">
-              <Card className="group cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-8 text-center">
-                <div className="text-6xl mb-4">🌸</div>
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+            <Link to="/flowers" className="group md:mt-4">
+              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
+                <div className="text-5xl md:text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">🌸</div>
+                <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Цветы
                 </h3>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
                   Свежие букеты и композиции собственного производства
                 </p>
-                <Button className="w-full bg-gradient-primary hover:shadow-glow">
+                <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
                   Выбрать цветы
                 </Button>
               </Card>
             </Link>
 
             {/* Balloons */}
-            <Link to="/balloons">
-              <Card className="group cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-8 text-center">
-                <div className="text-6xl mb-4">🎈</div>
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+            <Link to="/balloons" className="group">
+              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
+                <div className="text-5xl md:text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">🎈</div>
+                <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Шары
                 </h3>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
                   Праздничные шары и композиции для любого торжества
                 </p>
-                <Button className="w-full bg-gradient-primary hover:shadow-glow">
+                <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
                   Купить шары
                 </Button>
               </Card>
@@ -123,23 +138,35 @@ const Index = () => {
       </section>
 
       {/* Features */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-gradient-to-br from-muted/20 to-muted/40">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-4xl mb-4">🚚</div>
-              <h3 className="text-xl font-semibold mb-2">Бесплатная доставка</h3>
-              <p className="text-muted-foreground">Доставляем всё абсолютно бесплатно по Нарве</p>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">Почему выбирают Eazy?</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white text-2xl mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
+                🚚
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Бесплатная доставка</h3>
+              <p className="text-muted-foreground leading-relaxed">Доставляем всё абсолютно бесплатно по Нарве</p>
             </div>
-            <div>
-              <div className="text-4xl mb-4">⏱️</div>
-              <h3 className="text-xl font-semibold mb-2">Быстро</h3>
-              <p className="text-muted-foreground">Доставка за 30 минут в любую точку города</p>
+            
+            <div className="text-center group md:mt-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white text-2xl mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
+                ⏱️
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Быстро</h3>
+              <p className="text-muted-foreground leading-relaxed">Доставка за 30 минут в любую точку города</p>
             </div>
-            <div>
-              <div className="text-4xl mb-4">🎯</div>
-              <h3 className="text-xl font-semibold mb-2">Качество</h3>
-              <p className="text-muted-foreground">Только свежие продукты и качественные товары</p>
+            
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white text-2xl mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
+                🎯
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Качество</h3>
+              <p className="text-muted-foreground leading-relaxed">Только свежие продукты и качественные товары</p>
             </div>
           </div>
         </div>
