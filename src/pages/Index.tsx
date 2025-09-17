@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
+import { UtensilsCrossed, Flower2, PartyPopper, Truck, Clock, Target } from "lucide-react";
 import DriverApp from "./DriverApp";
 
 const Index = () => {
@@ -90,7 +91,9 @@ const Index = () => {
             <Link to="/restaurants" className="group">
               <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20 h-full flex flex-col">
                 <div className="flex justify-center mb-4">
-                  <div className="text-5xl md:text-6xl group-hover:scale-110 transition-transform duration-300">🍽️</div>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <UtensilsCrossed className="w-8 h-8 text-white" />
+                  </div>
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Рестораны
@@ -108,7 +111,9 @@ const Index = () => {
             <Link to="/flowers" className="group">
               <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20 h-full flex flex-col">
                 <div className="flex justify-center mb-4">
-                  <div className="text-5xl md:text-6xl group-hover:scale-110 transition-transform duration-300">🌸</div>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Flower2 className="w-8 h-8 text-white" />
+                  </div>
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Цветы
@@ -126,7 +131,9 @@ const Index = () => {
             <Link to="/balloons" className="group">
               <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20 h-full flex flex-col">
                 <div className="flex justify-center mb-4">
-                  <div className="text-5xl md:text-6xl group-hover:scale-110 transition-transform duration-300">🎈</div>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <PartyPopper className="w-8 h-8 text-white" />
+                  </div>
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Шары
@@ -152,19 +159,25 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center group">
-              <div className="text-4xl md:text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🚚</div>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
+                <Truck className="w-8 h-8" />
+              </div>
               <h3 className="text-xl font-semibold mb-3">Бесплатная доставка</h3>
               <p className="text-muted-foreground leading-relaxed">Доставляем всё абсолютно бесплатно по Нарве</p>
             </div>
             
             <div className="text-center group">
-              <div className="text-4xl md:text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">⏱️</div>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
+                <Clock className="w-8 h-8" />
+              </div>
               <h3 className="text-xl font-semibold mb-3">Быстро</h3>
               <p className="text-muted-foreground leading-relaxed">Доставка за 30 минут в любую точку города</p>
             </div>
             
             <div className="text-center group">
-              <div className="text-4xl md:text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🎯</div>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
+                <Target className="w-8 h-8" />
+              </div>
               <h3 className="text-xl font-semibold mb-3">Качество</h3>
               <p className="text-muted-foreground leading-relaxed">Только свежие продукты и качественные товары</p>
             </div>

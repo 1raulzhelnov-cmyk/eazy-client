@@ -1,4 +1,4 @@
-import { Search, MapPin, User, LogIn, Bell, Heart } from "lucide-react";
+import { Search, MapPin, User, LogIn, Bell, Heart, UtensilsCrossed, Flower2, PartyPopper } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,9 +20,9 @@ const Header = () => {
   const searchRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
-    { path: "/restaurants", label: "Рестораны", icon: "🍽️" },
-    { path: "/flowers", label: "Цветы", icon: "🌸" },
-    { path: "/balloons", label: "Шары", icon: "🎈" },
+    { path: "/restaurants", label: "Рестораны", icon: UtensilsCrossed },
+    { path: "/flowers", label: "Цветы", icon: Flower2 },
+    { path: "/balloons", label: "Шары", icon: PartyPopper },
   ];
 
   const handleSignOut = async () => {
@@ -84,7 +84,9 @@ const Header = () => {
                     : "text-foreground hover:text-primary"
                 }`}
               >
-                <span>{item.icon}</span>
+                <span className={`w-5 h-5 ${location.pathname === item.path ? "text-primary-foreground" : "text-muted-foreground group-hover:text-primary"}`}>
+                  <item.icon className="w-5 h-5" />
+                </span>
                 {item.label}
               </Link>
             ))}
