@@ -193,13 +193,13 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Company Info */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">💕</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative">
+                  <h3 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent tracking-tight">
+                    Eazy
+                  </h3>
+                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-primary rounded-full opacity-60"></div>
                 </div>
-                <h3 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Eazy
-                </h3>
               </div>
               <p className="text-muted-foreground mb-4">
                 {t('footer.description')}
