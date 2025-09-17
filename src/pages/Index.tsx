@@ -108,7 +108,7 @@ const Index = () => {
             </Link>
 
             {/* Flowers */}
-            <Link to="/flowers" className="group md:mt-4">
+            <Link to="/flowers" className="group">
               <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
                 <div className="flex justify-center mb-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
