@@ -46,13 +46,14 @@ export default function AdminDashboard() {
     systemAlerts: 1
   });
   const [loading, setLoading] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true); // Demo mode - always show admin panel
+  const [isAdmin, setIsAdmin] = useState(true); // Demo mode default
+  const [demoMode, setDemoMode] = useState(false);
 
   useEffect(() => {
+    if (demoMode) return;
     checkAdminStatus();
     fetchDashboardStats();
-  }, [user]);
-
+  }, [user, demoMode]);
   const checkAdminStatus = async () => {
     if (!user) return;
     
@@ -112,7 +113,7 @@ export default function AdminDashboard() {
     }
   };
 
-  if (!user) {
+  if (!user && !demoMode) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Card className="w-96">
@@ -120,6 +121,11 @@ export default function AdminDashboard() {
             <CardTitle>Требуется авторизация</CardTitle>
             <CardDescription>Пожалуйста, войдите в систему для доступа к админ-панели</CardDescription>
           </CardHeader>
+          <CardContent>
+            <Button className="w-full" onClick={() => setDemoMode(true)}>
+              Посмотреть превью (демо)
+            </Button>
+          </CardContent>
         </Card>
       </div>
     );
