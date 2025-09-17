@@ -7,6 +7,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import CartSheet from "@/components/CartSheet";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import NotificationCenter from "@/components/NotificationCenter";
 import PushNotificationCenter from "@/components/PushNotificationCenter";
 import WishlistManager from "@/components/WishlistManager";
@@ -15,14 +17,15 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
-    { path: "/restaurants", label: "Рестораны", icon: UtensilsCrossed },
-    { path: "/flowers", label: "Цветы", icon: Flower2 },
-    { path: "/balloons", label: "Шары", icon: PartyPopper },
+    { path: "/restaurants", label: t('header.nav.restaurants'), icon: UtensilsCrossed },
+    { path: "/flowers", label: t('header.nav.flowers'), icon: Flower2 },
+    { path: "/balloons", label: t('header.nav.balloons'), icon: PartyPopper },
   ];
 
   const handleSignOut = async () => {
@@ -95,7 +98,7 @@ const Header = () => {
           {/* Location */}
           <div className="hidden lg:flex items-center gap-2 text-muted-foreground">
             <MapPin className="w-4 h-4" />
-            <span className="text-sm">Доставка в Нарву</span>
+            <span className="text-sm">{t('header.delivery.location')}</span>
           </div>
 
           {/* Search */}
@@ -104,7 +107,7 @@ const Header = () => {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
-                  placeholder="Найти рестораны, цветы, шары..."
+                  placeholder={t('header.search.placeholder')}
                   className="pl-10 bg-muted/50"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -140,6 +143,7 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             {user && <NotificationCenter />}
             {user && <PushNotificationCenter />}
             {user && <WishlistManager />}
@@ -171,30 +175,30 @@ const Header = () => {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/profile" className="cursor-pointer">Профиль</Link>
+                    <Link to="/profile" className="cursor-pointer">{t('header.profile.profile')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/orders" className="cursor-pointer">Мои заказы</Link>
+                    <Link to="/orders" className="cursor-pointer">{t('header.profile.orders')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/favorites" className="cursor-pointer">Избранное</Link>
+                    <Link to="/favorites" className="cursor-pointer">{t('header.profile.favorites')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/addresses" className="cursor-pointer">Адреса</Link>
+                    <Link to="/addresses" className="cursor-pointer">{t('header.profile.addresses')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/support" className="cursor-pointer">Поддержка</Link>
+                    <Link to="/support" className="cursor-pointer">{t('header.profile.support')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/driver" className="cursor-pointer">🚚 Стать курьером</Link>
+                    <Link to="/driver" className="cursor-pointer">{t('header.profile.driver')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/admin" className="cursor-pointer">⚙️ Админ панель</Link>
+                    <Link to="/admin" className="cursor-pointer">{t('header.profile.admin')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
-                    Выйти
+                    {t('header.profile.logout')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

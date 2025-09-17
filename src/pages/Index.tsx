@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { UtensilsCrossed, Flower2, PartyPopper, Truck, Clock, Target } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import DriverApp from "./DriverApp";
 
 const Index = () => {
   const [appMode, setAppMode] = useState<'customer' | 'driver'>('customer');
+  const { t } = useLanguage();
 
   if (appMode === 'driver') {
     return (
@@ -29,7 +31,7 @@ const Index = () => {
           onClick={() => setAppMode('customer')}
           className="text-xs"
         >
-          👤 Клиент
+          {t('mode.customer')}
         </Button>
         <Button
           variant={appMode !== 'customer' ? 'default' : 'ghost'}
@@ -37,7 +39,7 @@ const Index = () => {
           onClick={() => setAppMode('driver')}
           className="text-xs"
         >
-          🚚 Курьер
+          {t('mode.driver')}
         </Button>
         <Link to="/restaurant-dashboard">
           <Button
@@ -45,7 +47,7 @@ const Index = () => {
             size="sm"
             className="text-xs"
           >
-            🏪 Ресторан
+            {t('mode.restaurant')}
           </Button>
         </Link>
       </div>
@@ -61,15 +63,15 @@ const Index = () => {
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Добро пожаловать в 
+              {t('home.hero.welcome')} 
               <span className="inline-block ml-2 text-primary-glow transform -rotate-1"> Eazy</span>
             </h1>
             <div className="space-y-3 mb-8">
               <p className="text-lg md:text-xl opacity-95">
-                Доставка еды, цветов и шаров в Нарву за 30 минут
+                {t('home.hero.subtitle')}
               </p>
               <p className="text-base md:text-lg opacity-85 max-w-2xl mx-auto">
-                Выберите категорию и начните делать заказы прямо сейчас!
+                {t('home.hero.description')}
               </p>
             </div>
           </div>
@@ -80,9 +82,9 @@ const Index = () => {
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">Что вы хотите заказать?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">{t('home.categories.title')}</h2>
             <p className="text-muted-foreground max-w-md mx-auto">
-              Свежие продукты, красивые цветы и праздничные шары
+              {t('home.categories.subtitle')}
             </p>
           </div>
           
@@ -96,13 +98,13 @@ const Index = () => {
                   </div>
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                  Рестораны
+                  {t('home.restaurants.title')}
                 </h3>
                 <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed flex-grow">
-                  Лучшие рестораны города с бесплатной доставкой
+                  {t('home.restaurants.description')}
                 </p>
                 <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
-                  Заказать еду
+                  {t('home.restaurants.button')}
                 </Button>
               </Card>
             </Link>
@@ -116,13 +118,13 @@ const Index = () => {
                   </div>
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                  Цветы
+                  {t('home.flowers.title')}
                 </h3>
                 <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed flex-grow">
-                  Свежие букеты и композиции собственного производства
+                  {t('home.flowers.description')}
                 </p>
                 <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
-                  Выбрать цветы
+                  {t('home.flowers.button')}
                 </Button>
               </Card>
             </Link>
@@ -136,13 +138,13 @@ const Index = () => {
                   </div>
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                  Шары
+                  {t('home.balloons.title')}
                 </h3>
                 <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed flex-grow">
-                  Праздничные шары и композиции для любого торжества
+                  {t('home.balloons.description')}
                 </p>
                 <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
-                  Купить шары
+                  {t('home.balloons.button')}
                 </Button>
               </Card>
             </Link>
@@ -154,7 +156,7 @@ const Index = () => {
       <section className="py-16 bg-gradient-to-br from-muted/20 to-muted/40">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">Почему выбирают Eazy?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">{t('home.features.title')}</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -162,24 +164,24 @@ const Index = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
                 <Truck className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Бесплатная доставка</h3>
-              <p className="text-muted-foreground leading-relaxed">Доставляем всё абсолютно бесплатно по Нарве</p>
+              <h3 className="text-xl font-semibold mb-3">{t('home.features.delivery.title')}</h3>
+              <p className="text-muted-foreground leading-relaxed">{t('home.features.delivery.description')}</p>
             </div>
             
             <div className="text-center group">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
                 <Clock className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Быстро</h3>
-              <p className="text-muted-foreground leading-relaxed">Доставка за 30 минут в любую точку города</p>
+              <h3 className="text-xl font-semibold mb-3">{t('home.features.fast.title')}</h3>
+              <p className="text-muted-foreground leading-relaxed">{t('home.features.fast.description')}</p>
             </div>
             
             <div className="text-center group">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-glow">
                 <Target className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Качество</h3>
-              <p className="text-muted-foreground leading-relaxed">Только свежие продукты и качественные товары</p>
+              <h3 className="text-xl font-semibold mb-3">{t('home.features.quality.title')}</h3>
+              <p className="text-muted-foreground leading-relaxed">{t('home.features.quality.description')}</p>
             </div>
           </div>
         </div>
@@ -200,57 +202,57 @@ const Index = () => {
                 </h3>
               </div>
               <p className="text-muted-foreground mb-4">
-                Быстрая доставка еды, цветов и шаров в Нарву за 30 минут
+                {t('footer.description')}
               </p>
               <p className="text-sm text-muted-foreground">
-                © 2024 Eazy. Все права защищены.
+                {t('footer.copyright')}
               </p>
             </div>
 
             {/* Quick Links */}
             <div>
-              <h4 className="font-semibold mb-4">Быстрые ссылки</h4>
+              <h4 className="font-semibold mb-4">{t('footer.quicklinks')}</h4>
               <div className="space-y-2">
                 <Link to="/restaurants" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Рестораны
+                  {t('header.nav.restaurants')}
                 </Link>
                 <Link to="/flowers" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Цветы
+                  {t('header.nav.flowers')}
                 </Link>
                 <Link to="/balloons" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Шары
+                  {t('header.nav.balloons')}
                 </Link>
                 <Link to="/favorites" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Избранное
+                  {t('header.profile.favorites')}
                 </Link>
               </div>
             </div>
 
             {/* Account */}
             <div>
-              <h4 className="font-semibold mb-4">Аккаунт</h4>
+              <h4 className="font-semibold mb-4">{t('footer.account')}</h4>
               <div className="space-y-2">
                 <Link to="/profile" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Профиль
+                  {t('header.profile.profile')}
                 </Link>
                 <Link to="/orders" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Мои заказы
+                  {t('header.profile.orders')}
                 </Link>
                 <Link to="/addresses" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Адреса
+                  {t('header.profile.addresses')}
                 </Link>
                 <Link to="/auth" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Войти
+                  {t('footer.login')}
                 </Link>
               </div>
             </div>
 
             {/* Support */}
             <div>
-              <h4 className="font-semibold mb-4">Поддержка</h4>
+              <h4 className="font-semibold mb-4">{t('footer.support')}</h4>
               <div className="space-y-2">
                 <Link to="/support" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Центр поддержки
+                  {t('footer.supportcenter')}
                 </Link>
                 <a href="tel:+37255551234" className="block text-muted-foreground hover:text-primary transition-colors">
                   +372 5555-1234
@@ -259,7 +261,7 @@ const Index = () => {
                   support@eazy.ee
                 </a>
                 <p className="text-sm text-muted-foreground">
-                  Пн-Вс 8:00-23:00
+                  {t('footer.schedule')}
                 </p>
               </div>
             </div>
