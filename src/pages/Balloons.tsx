@@ -3,14 +3,15 @@ import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Circle, Sparkles, Gift, Heart, Hash } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const balloonCategories = [
-  { id: "all", name: "Все шары", Icon: Circle },
-  { id: "helium", name: "Гелиевые", Icon: Circle },
-  { id: "foil", name: "Фольгированные", Icon: Sparkles },
-  { id: "birthday", name: "День рождения", Icon: Gift },
-  { id: "wedding", name: "Свадебные", Icon: Heart },
-  { id: "numbers", name: "Цифры", Icon: Hash },
+const getBalloonCategories = (t: (key: string) => string) => [
+  { id: "all", name: t('balloons.categories.all'), Icon: Circle },
+  { id: "helium", name: t('balloons.categories.helium'), Icon: Circle },
+  { id: "foil", name: t('balloons.categories.foil'), Icon: Sparkles },
+  { id: "birthday", name: t('balloons.categories.birthday'), Icon: Gift },
+  { id: "wedding", name: t('balloons.categories.wedding'), Icon: Heart },
+  { id: "numbers", name: t('balloons.categories.numbers'), Icon: Hash },
 ];
 
 // Balloon products data
@@ -73,7 +74,9 @@ const balloons = [
   },
 ];
 
-const BalloonCategoryFilter = ({ selectedCategory, onCategoryChange }: {selectedCategory: string, onCategoryChange: (category: string) => void}) => {
+const BalloonCategoryFilter = ({ selectedCategory, onCategoryChange, t }: {selectedCategory: string, onCategoryChange: (category: string) => void, t: (key: string) => string}) => {
+  const balloonCategories = getBalloonCategories(t);
+  
   return (
     <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
       {balloonCategories.map((category) => (
@@ -96,6 +99,7 @@ const BalloonCategoryFilter = ({ selectedCategory, onCategoryChange }: {selected
 
 const Balloons = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const { t } = useLanguage();
 
   const filteredBalloons = selectedCategory === "all" 
     ? balloons 
@@ -111,21 +115,21 @@ const Balloons = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Circle className="w-8 h-8 md:w-12 md:h-12" />
             <h1 className="text-3xl md:text-5xl font-bold">
-              Праздничные шары
+              {t('balloons.hero.title')}
             </h1>
           </div>
           <p className="text-lg mb-6 opacity-90">
-            Создаем яркие праздники с нашими воздушными шарами
+            {t('balloons.hero.subtitle')}
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <Badge className="bg-white/20 text-white border-white/30 px-4 py-2">
-              Гелий в подарок
+              {t('balloons.hero.helium')}
             </Badge>
             <Badge className="bg-white/20 text-white border-white/30 px-4 py-2">
-              Готовые композиции
+              {t('balloons.hero.ready')}
             </Badge>
             <Badge className="bg-white/20 text-white border-white/30 px-4 py-2">
-              Быстрая доставка
+              {t('balloons.hero.fast')}
             </Badge>
           </div>
         </div>
@@ -137,6 +141,7 @@ const Balloons = () => {
           <BalloonCategoryFilter 
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
+            t={t}
           />
         </div>
       </section>
@@ -146,10 +151,10 @@ const Balloons = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">
-              {selectedCategory === "all" ? "Все шары" : "Найденные товары"}
+              {selectedCategory === "all" ? t('balloons.title.all') : t('balloons.title.found')}
             </h2>
             <span className="text-muted-foreground">
-              {filteredBalloons.length} товаров
+              {filteredBalloons.length} {t('balloons.products.count')}
             </span>
           </div>
           

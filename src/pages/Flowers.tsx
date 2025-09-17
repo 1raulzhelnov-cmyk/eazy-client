@@ -6,14 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Flower2, Heart, Flower, Sparkles, Crown, TreePine, Palette } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const flowerCategories = [
-  { id: "all", name: "Все цветы", Icon: Flower2 },
-  { id: "roses", name: "Розы", Icon: Heart },
-  { id: "tulips", name: "Тюльпаны", Icon: Flower },
-  { id: "bouquets", name: "Букеты", Icon: Sparkles },
-  { id: "wedding", name: "Свадебные", Icon: Crown },
-  { id: "plants", name: "Растения", Icon: TreePine },
+const getFlowerCategories = (t: (key: string) => string) => [
+  { id: "all", name: t('flowers.categories.all'), Icon: Flower2 },
+  { id: "roses", name: t('flowers.categories.roses'), Icon: Heart },
+  { id: "tulips", name: t('flowers.categories.tulips'), Icon: Flower },
+  { id: "bouquets", name: t('flowers.categories.bouquets'), Icon: Sparkles },
+  { id: "wedding", name: t('flowers.categories.wedding'), Icon: Crown },
+  { id: "plants", name: t('flowers.categories.plants'), Icon: TreePine },
 ];
 
 // Flower products data
@@ -76,7 +77,9 @@ const flowers = [
   },
 ];
 
-const FlowerCategoryFilter = ({ selectedCategory, onCategoryChange }: {selectedCategory: string, onCategoryChange: (category: string) => void}) => {
+const FlowerCategoryFilter = ({ selectedCategory, onCategoryChange, t }: {selectedCategory: string, onCategoryChange: (category: string) => void, t: (key: string) => string}) => {
+  const flowerCategories = getFlowerCategories(t);
+  
   return (
     <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
       {flowerCategories.map((category) => (
@@ -100,6 +103,7 @@ const FlowerCategoryFilter = ({ selectedCategory, onCategoryChange }: {selectedC
 const Flowers = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showBouquetBuilder, setShowBouquetBuilder] = useState(false);
+  const { t } = useLanguage();
 
   const filteredFlowers = selectedCategory === "all" 
     ? flowers 
@@ -122,7 +126,7 @@ const Flowers = () => {
             onClick={() => setShowBouquetBuilder(false)}
             className="mb-4"
           >
-            ← Назад к каталогу
+            ← {t('flowers.back')}
           </Button>
           <FlowerBouquetBuilder onAddToCart={handleAddToCart} />
         </div>
@@ -140,21 +144,21 @@ const Flowers = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Flower2 className="w-8 h-8 md:w-12 md:h-12" />
             <h1 className="text-3xl md:text-5xl font-bold">
-              Свежие цветы
+              {t('flowers.hero.title')}
             </h1>
           </div>
           <p className="text-lg mb-6 opacity-90">
-            Собираем и доставляем самые красивые букеты в Нарву
+            {t('flowers.hero.subtitle')}
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <Badge className="bg-white/20 text-white border-white/30 px-4 py-2">
-              Свежие каждый день
+              {t('flowers.hero.fresh')}
             </Badge>
             <Badge className="bg-white/20 text-white border-white/30 px-4 py-2">
-              Собственное производство
+              {t('flowers.hero.production')}
             </Badge>
             <Badge className="bg-white/20 text-white border-white/30 px-4 py-2">
-              Доставка 30 мин
+              {t('flowers.hero.delivery')}
             </Badge>
           </div>
           <div className="mt-6">
@@ -163,7 +167,7 @@ const Flowers = () => {
               className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-3 flex items-center gap-2"
             >
               <Palette className="w-5 h-5" />
-              Создать свой букет
+              {t('flowers.hero.create')}
             </Button>
           </div>
         </div>
@@ -177,6 +181,7 @@ const Flowers = () => {
           <FlowerCategoryFilter 
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
+            t={t}
           />
         </div>
       </section>
@@ -186,10 +191,10 @@ const Flowers = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">
-              {selectedCategory === "all" ? "Все цветы" : "Найденные товары"}
+              {selectedCategory === "all" ? t('flowers.title.all') : t('flowers.title.found')}
             </h2>
             <span className="text-muted-foreground">
-              {filteredFlowers.length} товаров
+              {filteredFlowers.length} {t('flowers.products.count')}
             </span>
           </div>
           

@@ -58,7 +58,7 @@ const Header = () => {
 
   // Quick search suggestions
   const quickSearches = [
-    "Пицца", "Суши", "Бургеры", "Кофе", "Салаты", "Десерты"
+    t('search.pizza'), t('search.sushi'), t('search.burgers'), t('search.coffee'), t('search.salads'), t('search.desserts')
   ];
 
   return (
@@ -116,7 +116,7 @@ const Header = () => {
             {/* Quick Search Dropdown */}
             {showSearchResults && searchQuery.length === 0 && (
               <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 p-2">
-                <div className="text-xs text-muted-foreground mb-2 px-2">Популярные запросы:</div>
+                <div className="text-xs text-muted-foreground mb-2 px-2">{t('search.popular')}</div>
                 <div className="flex flex-wrap gap-1">
                   {quickSearches.map((term) => (
                     <Button
