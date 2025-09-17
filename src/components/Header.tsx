@@ -187,6 +187,9 @@ const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/driver" className="cursor-pointer">🚚 Стать курьером</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin" className="cursor-pointer">⚙️ Админ панель</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
                     Выйти
