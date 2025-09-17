@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Plus, Minus, Heart, Gift, Sparkles, Camera } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Flower {
   id: string;
@@ -41,104 +42,104 @@ interface CustomBouquet {
   deliveryDate: string;
 }
 
-const FLOWERS: Flower[] = [
+const getFlowers = (t: (key: string) => string): Flower[] => [
   {
     id: '1',
-    name: 'Роза красная',
+    name: t('flower.red.rose'),
     price: 3.50,
     color: 'red',
-    meaning: 'Любовь и страсть',
+    meaning: t('meaning.love.passion'),
     season: 'all',
     image: '🌹',
     available: true
   },
   {
     id: '2',
-    name: 'Роза белая',
+    name: t('flower.white.rose'),
     price: 3.50,
     color: 'white',
-    meaning: 'Чистота и невинность',
+    meaning: t('meaning.purity.innocence'),
     season: 'all',
     image: '🤍',
     available: true
   },
   {
     id: '3',
-    name: 'Тюльпан',
+    name: t('flower.tulip'),
     price: 2.80,
     color: 'pink',
-    meaning: 'Совершенная любовь',
+    meaning: t('meaning.perfect.love'),
     season: 'spring',
     image: '🌷',
     available: true
   },
   {
     id: '4',
-    name: 'Лилия',
+    name: t('flower.lily'),
     price: 4.20,
     color: 'white',
-    meaning: 'Возрождение и надежда',
+    meaning: t('meaning.rebirth.hope'),
     season: 'summer',
     image: '🌺',
     available: true
   },
   {
     id: '5',
-    name: 'Гвоздика', 
+    name: t('flower.carnation'),
     price: 2.20,
     color: 'pink',
-    meaning: 'Материнская любовь',
+    meaning: t('meaning.maternal.love'),
     season: 'all',
     image: '🌸',
     available: true
   },
   {
     id: '6',
-    name: 'Хризантема',
+    name: t('flower.chrysanthemum'),
     price: 3.00,
     color: 'yellow',
-    meaning: 'Дружба и радость',
+    meaning: t('meaning.friendship.joy'),
     season: 'autumn',
     image: '🌻',
     available: true
   }
 ];
 
-const WRAPPING_OPTIONS = [
-  { id: 'paper', name: 'Крафт-бумага', price: 2.50 },
-  { id: 'silk', name: 'Шёлковая лента', price: 4.00 },
-  { id: 'luxury', name: 'Подарочная коробка', price: 8.00 },
-  { id: 'eco', name: 'Эко-упаковка', price: 3.50 }
+const getWrappingOptions = (t: (key: string) => string) => [
+  { id: 'paper', name: t('wrap.kraft'), price: 2.50 },
+  { id: 'silk', name: t('wrap.silk'), price: 4.00 },
+  { id: 'luxury', name: t('wrap.luxury'), price: 8.00 },
+  { id: 'eco', name: t('wrap.eco'), price: 3.50 }
 ];
 
-const OCCASION_TEMPLATES = [
+const getOccasionTemplates = (t: (key: string) => string) => [
   {
-    name: 'День рождения',
+    name: t('builder.template.birthday'),
     flowers: [
-      { flowerId: '1', quantity: 7 }, // Красные розы
-      { flowerId: '4', quantity: 3 }  // Лилии
+      { flowerId: '1', quantity: 7 }, // Red roses
+      { flowerId: '4', quantity: 3 }  // Lilies
     ],
     wrapping: 'silk'
   },
   {
-    name: 'Романтическое свидание',
+    name: t('builder.template.romantic'),
     flowers: [
-      { flowerId: '1', quantity: 11 } // Красные розы
+      { flowerId: '1', quantity: 11 } // Red roses
     ],
     wrapping: 'luxury'
   },
   {
-    name: '8 марта',
+    name: t('builder.template.march'),
     flowers: [
-      { flowerId: '3', quantity: 8 }, // Тюльпаны
-      { flowerId: '5', quantity: 3 }  // Гвоздики
+      { flowerId: '3', quantity: 8 }, // Tulips
+      { flowerId: '5', quantity: 3 }  // Carnations
     ],
     wrapping: 'silk'
   },
   {
-    name: 'Извинения',
+    name: t('builder.template.apology'),
     flowers: [
-      { flowerId: '2', quantity: 9 } // Белые розы
+      { flowerId: '2', quantity: 9 } // White roses
     ],
     wrapping: 'paper'
   }
@@ -148,9 +149,19 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
   const [bouquetItems, setBouquetItems] = useState<BouquetItem[]>([]);
   const [selectedWrapping, setSelectedWrapping] = useState('paper');
   const [cardMessage, setCardMessage] = useState('');
-  const [bouquetName, setBouquetName] = useState('Мой букет');
+  const [bouquetName, setBouquetName] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
   const { toast } = useToast();
+  const { t } = useLanguage();
+
+  const FLOWERS = getFlowers(t);
+  const WRAPPING_OPTIONS = getWrappingOptions(t);
+  const OCCASION_TEMPLATES = getOccasionTemplates(t);
+
+  // Initialize bouquet name
+  useEffect(() => {
+    setBouquetName(t('builder.my.bouquet'));
+  }, [t]);
 
   // Автоматическое применение шаблона для случая
   useEffect(() => {
@@ -172,7 +183,7 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
     
     setBouquetItems(newItems);
     setSelectedWrapping(template.wrapping);
-    setBouquetName(`Букет "${template.name}"`);
+    setBouquetName(`${t('builder.my.bouquet')} "${template.name}"`);
   };
 
   const addFlower = (flower: Flower) => {
@@ -230,8 +241,8 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
   const handleAddToCart = () => {
     if (bouquetItems.length === 0) {
       toast({
-        title: "Пустой букет",
-        description: "Добавьте хотя бы один цветок",
+        title: t('builder.empty.bouquet'),
+        description: t('builder.add.flower'),
         variant: "destructive"
       });
       return;
@@ -244,15 +255,15 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
       wrapping: selectedWrapping,
       card: cardMessage,
       totalPrice: calculateTotal(),
-      occasion: occasion || 'Особый случай',
+      occasion: occasion || t('builder.special.occasion'),
       deliveryDate: new Date().toISOString()
     };
 
     onAddToCart(customBouquet);
     
     toast({
-      title: "Букет добавлен в корзину!",
-      description: `${bouquetName} за ${calculateTotal().toFixed(2)}€`
+      title: t('builder.bouquet.added'),
+      description: `${bouquetName} ${calculateTotal().toFixed(2)}€`
     });
   };
 
@@ -264,14 +275,14 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Конструктор */}
+      {/* Constructor */}
       <div className="lg:col-span-2 space-y-6">
-        {/* Шаблоны по случаям */}
+        {/* Templates by occasions */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-primary" />
-              Готовые идеи
+              {t('builder.ready.ideas')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -285,7 +296,7 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
                 >
                   <span className="font-semibold">{template.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {template.flowers.reduce((sum, f) => sum + f.quantity, 0)} цветков
+                    {template.flowers.reduce((sum, f) => sum + f.quantity, 0)} {t('builder.flowers.count')}
                   </span>
                 </Button>
               ))}
@@ -293,10 +304,10 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
           </CardContent>
         </Card>
 
-        {/* Выбор цветов */}
+        {/* Flower selection */}
         <Card>
           <CardHeader>
-            <CardTitle>Выберите цветы</CardTitle>
+            <CardTitle>{t('builder.select.flowers')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -327,12 +338,12 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
           </CardContent>
         </Card>
 
-        {/* Упаковка */}
+        {/* Wrapping */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Gift className="w-5 h-5" />
-              Упаковка
+              {t('builder.wrapping')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -352,47 +363,47 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
           </CardContent>
         </Card>
 
-        {/* Открытка */}
+        {/* Card */}
         <Card>
           <CardHeader>
-            <CardTitle>Открытка с пожеланием</CardTitle>
+            <CardTitle>{t('builder.card.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
-              placeholder="Напишите ваше пожелание..."
+              placeholder={t('builder.card.placeholder')}
               value={cardMessage}
               onChange={(e) => setCardMessage(e.target.value)}
               maxLength={200}
               className="min-h-[80px]"
             />
             <p className="text-xs text-muted-foreground mt-2">
-              {cardMessage.length}/200 символов
+              {cardMessage.length}/200 {t('builder.card.symbols')}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Предварительный просмотр */}
+      {/* Preview */}
       <div className="space-y-4">
         <Card className="sticky top-4">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Camera className="w-5 h-5" />
-              Ваш букет
+              {t('builder.your.bouquet')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Визуальный предпросмотр */}
+            {/* Visual preview */}
             <div className="bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950 dark:to-purple-950 rounded-lg p-6 text-center min-h-[120px] flex items-center justify-center">
               <div className="text-4xl leading-relaxed">
-                {getBouquetPreview() || '🌸 Выберите цветы'}
+                {getBouquetPreview() || `🌸 ${t('builder.choose.flowers')}`}
               </div>
             </div>
 
-            {/* Детали букета */}
+            {/* Bouquet details */}
             {bouquetItems.length > 0 && (
               <div className="space-y-3">
-                <h4 className="font-semibold">Состав букета:</h4>
+                <h4 className="font-semibold">{t('builder.bouquet.composition')}</h4>
                 {bouquetItems.map((item) => (
                   <div key={item.flower.id} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">
@@ -425,16 +436,16 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>Цветы ({getTotalFlowers()} шт.)</span>
+                    <span>{t('builder.flowers')} ({getTotalFlowers()} {t('builder.flowers.pieces')})</span>
                     <span>{(calculateTotal() - (WRAPPING_OPTIONS.find(w => w.id === selectedWrapping)?.price || 0)).toFixed(2)}€</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Упаковка</span>
+                    <span>{t('builder.wrapping.package')}</span>
                     <span>{(WRAPPING_OPTIONS.find(w => w.id === selectedWrapping)?.price || 0).toFixed(2)}€</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-bold text-lg">
-                    <span>Итого</span>
+                    <span>{t('builder.total')}</span>
                     <span className="text-primary">{calculateTotal().toFixed(2)}€</span>
                   </div>
                 </div>
@@ -447,7 +458,7 @@ export const FlowerBouquetBuilder = ({ onAddToCart, occasion }: BouquetBuilderPr
               disabled={bouquetItems.length === 0}
             >
               <Heart className="w-4 h-4 mr-2" />
-              Добавить в корзину
+              {t('builder.add.cart')}
             </Button>
           </CardContent>
         </Card>
