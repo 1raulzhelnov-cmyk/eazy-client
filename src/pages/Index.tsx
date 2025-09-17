@@ -50,6 +50,15 @@ const Index = () => {
             {t('mode.restaurant')}
           </Button>
         </Link>
+        <Link to="/admin">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs"
+          >
+            ⚙️ Админ
+          </Button>
+        </Link>
       </div>
       
       {/* Hero Section */}
