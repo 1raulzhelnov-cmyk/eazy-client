@@ -67,12 +67,9 @@ const Header = () => {
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="relative">
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent tracking-tight">
-                Eazy
-              </h1>
-              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-primary rounded-full opacity-60"></div>
-            </div>
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent tracking-tight">
+              Eazy
+            </h1>
           </Link>
 
           {/* Navigation */}
