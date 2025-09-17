@@ -2,14 +2,15 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
+import { Circle, Sparkles, Gift, Heart, Hash } from "lucide-react";
 
 const balloonCategories = [
-  { id: "all", name: "Все шары", icon: "🎈" },
-  { id: "helium", name: "Гелиевые", icon: "🎈" },
-  { id: "foil", name: "Фольгированные", icon: "🎊" },
-  { id: "birthday", name: "День рождения", icon: "🎂" },
-  { id: "wedding", name: "Свадебные", icon: "💍" },
-  { id: "numbers", name: "Цифры", icon: "1️⃣" },
+  { id: "all", name: "Все шары", Icon: Circle },
+  { id: "helium", name: "Гелиевые", Icon: Circle },
+  { id: "foil", name: "Фольгированные", Icon: Sparkles },
+  { id: "birthday", name: "День рождения", Icon: Gift },
+  { id: "wedding", name: "Свадебные", Icon: Heart },
+  { id: "numbers", name: "Цифры", Icon: Hash },
 ];
 
 // Balloon products data
@@ -85,7 +86,7 @@ const BalloonCategoryFilter = ({ selectedCategory, onCategoryChange }: {selected
               : "bg-secondary text-secondary-foreground hover:bg-muted"
           }`}
         >
-          <span>{category.icon}</span>
+          <category.Icon className="w-4 h-4" />
           {category.name}
         </button>
       ))}
@@ -107,9 +108,12 @@ const Balloons = () => {
       {/* Hero Section */}
       <section className="bg-gradient-hero text-white py-12">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">
-            🎈 Праздничные шары
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Circle className="w-8 h-8 md:w-12 md:h-12" />
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Праздничные шары
+            </h1>
+          </div>
           <p className="text-lg mb-6 opacity-90">
             Создаем яркие праздники с нашими воздушными шарами
           </p>

@@ -1,16 +1,17 @@
 import { Badge } from "@/components/ui/badge";
+import { ShoppingBag, Utensils, Pizza, Fish, Sandwich, Coffee, Flower2, Circle, Gift, Cake } from "lucide-react";
 
 const categories = [
-  { id: "all", name: "Все", icon: "🛍️" },
-  { id: "food", name: "Еда", icon: "🍽️" },
-  { id: "pizza", name: "Пицца", icon: "🍕" },
-  { id: "sushi", name: "Суши", icon: "🍣" },
-  { id: "burger", name: "Бургеры", icon: "🍔" },
-  { id: "coffee", name: "Кофе", icon: "☕" },
-  { id: "flowers", name: "Цветы", icon: "🌸" },
-  { id: "balloons", name: "Шары", icon: "🎈" },
-  { id: "gifts", name: "Подарки", icon: "🎁" },
-  { id: "dessert", name: "Десерты", icon: "🧁" },
+  { id: "all", name: "Все", Icon: ShoppingBag },
+  { id: "food", name: "Еда", Icon: Utensils },
+  { id: "pizza", name: "Пицца", Icon: Pizza },
+  { id: "sushi", name: "Суши", Icon: Fish },
+  { id: "burger", name: "Бургеры", Icon: Sandwich },
+  { id: "coffee", name: "Кофе", Icon: Coffee },
+  { id: "flowers", name: "Цветы", Icon: Flower2 },
+  { id: "balloons", name: "Шары", Icon: Circle },
+  { id: "gifts", name: "Подарки", Icon: Gift },
+  { id: "dessert", name: "Десерты", Icon: Cake },
 ];
 
 interface CategoryFilterProps {
@@ -32,7 +33,7 @@ const CategoryFilter = ({ selectedCategory, onCategoryChange }: CategoryFilterPr
           }`}
           onClick={() => onCategoryChange(category.id)}
         >
-          <span>{category.icon}</span>
+          <category.Icon className="w-4 h-4" />
           {category.name}
         </Badge>
       ))}

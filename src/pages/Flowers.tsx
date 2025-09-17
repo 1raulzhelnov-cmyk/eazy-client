@@ -5,14 +5,15 @@ import FlowerBouquetBuilder from "@/components/FlowerBouquetBuilder";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Flower2, Heart, Flower, Sparkles, Crown, TreePine, Palette } from "lucide-react";
 
 const flowerCategories = [
-  { id: "all", name: "Все цветы", icon: "🌸" },
-  { id: "roses", name: "Розы", icon: "🌹" },
-  { id: "tulips", name: "Тюльпаны", icon: "🌷" },
-  { id: "bouquets", name: "Букеты", icon: "💐" },
-  { id: "wedding", name: "Свадебные", icon: "👰" },
-  { id: "plants", name: "Растения", icon: "🪴" },
+  { id: "all", name: "Все цветы", Icon: Flower2 },
+  { id: "roses", name: "Розы", Icon: Heart },
+  { id: "tulips", name: "Тюльпаны", Icon: Flower },
+  { id: "bouquets", name: "Букеты", Icon: Sparkles },
+  { id: "wedding", name: "Свадебные", Icon: Crown },
+  { id: "plants", name: "Растения", Icon: TreePine },
 ];
 
 // Flower products data
@@ -88,7 +89,7 @@ const FlowerCategoryFilter = ({ selectedCategory, onCategoryChange }: {selectedC
               : "bg-secondary text-secondary-foreground hover:bg-muted"
           }`}
         >
-          <span>{category.icon}</span>
+          <category.Icon className="w-4 h-4" />
           {category.name}
         </button>
       ))}
@@ -136,9 +137,12 @@ const Flowers = () => {
       {/* Hero Section */}
       <section className="bg-gradient-hero text-white py-12">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">
-            🌸 Свежие цветы
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Flower2 className="w-8 h-8 md:w-12 md:h-12" />
+            <h1 className="text-3xl md:text-5xl font-bold">
+              Свежие цветы
+            </h1>
+          </div>
           <p className="text-lg mb-6 opacity-90">
             Собираем и доставляем самые красивые букеты в Нарву
           </p>
@@ -156,9 +160,10 @@ const Flowers = () => {
           <div className="mt-6">
             <Button 
               onClick={() => setShowBouquetBuilder(true)}
-              className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-3"
+              className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-3 flex items-center gap-2"
             >
-              🎨 Создать свой букет
+              <Palette className="w-5 h-5" />
+              Создать свой букет
             </Button>
           </div>
         </div>
