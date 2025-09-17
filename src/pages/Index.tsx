@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
+import { UtensilsCrossed, Flower2, PartyPopper } from "lucide-react";
 import DriverApp from "./DriverApp";
 
 const Index = () => {
@@ -89,7 +90,11 @@ const Index = () => {
             {/* Restaurants */}
             <Link to="/restaurants" className="group">
               <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
-                <div className="text-5xl md:text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">🍽️</div>
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <UtensilsCrossed className="w-8 h-8 text-white" />
+                  </div>
+                </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Рестораны
                 </h3>
@@ -105,7 +110,11 @@ const Index = () => {
             {/* Flowers */}
             <Link to="/flowers" className="group md:mt-4">
               <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
-                <div className="text-5xl md:text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">🌸</div>
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Flower2 className="w-8 h-8 text-white" />
+                  </div>
+                </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Цветы
                 </h3>
@@ -121,7 +130,11 @@ const Index = () => {
             {/* Balloons */}
             <Link to="/balloons" className="group">
               <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
-                <div className="text-5xl md:text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">🎈</div>
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <PartyPopper className="w-8 h-8 text-white" />
+                  </div>
+                </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Шары
                 </h3>
