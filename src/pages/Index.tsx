@@ -86,10 +86,10 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto items-stretch">
             {/* Restaurants */}
             <Link to="/restaurants" className="group">
-              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
+              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20 h-full flex flex-col">
                 <div className="flex justify-center mb-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <UtensilsCrossed className="w-8 h-8 text-white" />
@@ -98,7 +98,7 @@ const Index = () => {
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Рестораны
                 </h3>
-                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed flex-grow">
                   Лучшие рестораны города с бесплатной доставкой
                 </p>
                 <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
@@ -109,7 +109,7 @@ const Index = () => {
 
             {/* Flowers */}
             <Link to="/flowers" className="group">
-              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
+              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20 h-full flex flex-col">
                 <div className="flex justify-center mb-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <Flower2 className="w-8 h-8 text-white" />
@@ -118,7 +118,7 @@ const Index = () => {
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Цветы
                 </h3>
-                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed flex-grow">
                   Свежие букеты и композиции собственного производства
                 </p>
                 <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
@@ -129,7 +129,7 @@ const Index = () => {
 
             {/* Balloons */}
             <Link to="/balloons" className="group">
-              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20">
+              <Card className="cursor-pointer overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 hover:scale-[1.02] p-6 md:p-8 text-center border-2 hover:border-primary/20 h-full flex flex-col">
                 <div className="flex justify-center mb-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <PartyPopper className="w-8 h-8 text-white" />
@@ -138,7 +138,7 @@ const Index = () => {
                 <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   Шары
                 </h3>
-                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed">
+                <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed flex-grow">
                   Праздничные шары и композиции для любого торжества
                 </p>
                 <Button className="w-full bg-gradient-primary hover:shadow-glow transform hover:-translate-y-0.5 transition-all">
