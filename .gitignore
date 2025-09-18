@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# iOS build artifacts and CocoaPods (should not be committed)
+ios/App/build
+ios/App/Pods
