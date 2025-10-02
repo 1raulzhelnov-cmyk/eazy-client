@@ -1,4 +1,5 @@
-import 'package:client_app/features/auth/providers.dart';
+import 'package:client_app/features/auth/domain/auth_state.dart';
+import 'package:client_app/features/auth/presentation/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,10 +23,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void _submit() {
-    if (!(_formKey.currentState?.validate() ?? false)) return;
-    ref.read(isAuthorizedProvider.notifier).login();
-    context.go('/home');
+  Future<void> _submit() async {
+    final String contact = _emailController.text.isNotEmpty ? _emailController.text : _phoneController.text;
+    if (contact.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Введите email или телефон')),
+      );
+      return;
+    }
+    await ref.read(authControllerProvider.notifier).sendOtp(contact);
+    if (!mounted) return;
+    context.go('/verify-otp', extra: contact);
   }
 
   @override
@@ -53,9 +61,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 validator: (value) => null,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: const Text('Продолжить'),
+              Consumer(
+                builder: (context, ref, _) {
+                  final state = ref.watch(authControllerProvider);
+                  final bool loading = state is Loading;
+                  return ElevatedButton(
+                    onPressed: loading ? null : _submit,
+                    child: loading
+                        ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Text('Получить код'),
+                  );
+                },
               ),
             ],
           ),
