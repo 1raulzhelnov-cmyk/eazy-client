@@ -1,29 +1,31 @@
+import 'package:client_app/features/auth/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
   void _submit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      context.go('/home');
-    }
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    ref.read(isAuthorizedProvider.notifier).login();
+    context.go('/home');
   }
 
   @override
@@ -41,21 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
-                validator: (value) =>
-                    (value == null || value.isEmpty) ? 'Enter email' : null,
+                validator: (value) => null,
               ),
               const SizedBox(height: 12),
               TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) =>
-                    (value == null || value.isEmpty) ? 'Enter password' : null,
+                controller: _phoneController,
+                decoration: const InputDecoration(labelText: 'Телефон'),
+                keyboardType: TextInputType.phone,
+                validator: (value) => null,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submit,
-                child: const Text('Sign in'),
+                child: const Text('Продолжить'),
               ),
             ],
           ),
