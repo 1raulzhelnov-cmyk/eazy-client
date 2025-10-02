@@ -39,6 +39,10 @@ dependencies:
   dio: ^5.9.0
   flutter_dotenv: ^6.0.0
   flutter_secure_storage: ^9.2.4
+  firebase_core: ^4.1.1
+  firebase_auth: ^6.1.0
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
 
 dev_dependencies:
   flutter_test:

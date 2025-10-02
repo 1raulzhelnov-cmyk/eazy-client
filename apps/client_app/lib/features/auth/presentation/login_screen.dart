@@ -73,6 +73,50 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   );
                 },
               ),
+              const SizedBox(height: 20),
+              Consumer(
+                builder: (context, ref, _) {
+                  final state = ref.watch(authControllerProvider);
+                  final bool loading = state is Loading;
+                  return OutlinedButton.icon(
+                    onPressed: loading
+                        ? null
+                        : () async {
+                            await ref.read(authControllerProvider.notifier).signInWithGoogle();
+                            final s = ref.read(authControllerProvider);
+                            if (s is Authenticated && context.mounted) {
+                              context.go('/home');
+                            } else if (s is ErrorState && context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.message)));
+                            }
+                          },
+                    icon: const Icon(Icons.g_mobiledata),
+                    label: const Text('Войти с Google'),
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
+              Consumer(
+                builder: (context, ref, _) {
+                  final state = ref.watch(authControllerProvider);
+                  final bool loading = state is Loading;
+                  return OutlinedButton.icon(
+                    onPressed: loading
+                        ? null
+                        : () async {
+                            await ref.read(authControllerProvider.notifier).signInWithApple();
+                            final s = ref.read(authControllerProvider);
+                            if (s is Authenticated && context.mounted) {
+                              context.go('/home');
+                            } else if (s is ErrorState && context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.message)));
+                            }
+                          },
+                    icon: const Icon(Icons.apple),
+                    label: const Text('Войти с Apple'),
+                  );
+                },
+              ),
             ],
           ),
         ),

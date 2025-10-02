@@ -1,5 +1,6 @@
 import 'package:client_app/features/auth/data/auth_api.dart';
 import 'package:client_app/features/auth/data/auth_storage.dart';
+import 'package:client_app/features/auth/data/firebase_auth_repository.dart';
 import 'package:client_app/features/auth/domain/auth_state.dart';
 import 'package:client_app/features/auth/domain/auth_tokens.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,11 +12,13 @@ final authControllerProvider = NotifierProvider<AuthController, AuthState>(
 class AuthController extends Notifier<AuthState> {
   late final AuthApi _api;
   late final AuthStorage _storage;
+  late final FirebaseAuthRepository _firebaseRepo;
 
   @override
   AuthState build() {
     _api = const AuthApi();
     _storage = AuthStorage.instance;
+    _firebaseRepo = FirebaseAuthRepository();
     _initialize();
     return const Unauthenticated();
   }
@@ -59,6 +62,43 @@ class AuthController extends Notifier<AuthState> {
       await _api.logout();
       await _storage.clear();
       state = const Unauthenticated();
+    } catch (e) {
+      state = ErrorState(e.toString());
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    state = const Loading();
+    try {
+      await _firebaseRepo.signInWithGoogle();
+      state = const Authenticated(userId: 'firebase');
+    } catch (e) {
+      state = ErrorState(e.toString());
+    }
+  }
+
+  Future<void> signInWithApple() async {
+    state = const Loading();
+    try {
+      await _firebaseRepo.signInWithApple();
+      state = const Authenticated(userId: 'firebase');
+    } catch (e) {
+      state = ErrorState(e.toString());
+    }
+  }
+
+  Future<void> linkWithGoogle() async {
+    try {
+      await _firebaseRepo.linkAccountWithGoogle();
+    } catch (e) {
+      // Keep current state; show error via UI
+      state = ErrorState(e.toString());
+    }
+  }
+
+  Future<void> linkWithApple() async {
+    try {
+      await _firebaseRepo.linkAccountWithApple();
     } catch (e) {
       state = ErrorState(e.toString());
     }

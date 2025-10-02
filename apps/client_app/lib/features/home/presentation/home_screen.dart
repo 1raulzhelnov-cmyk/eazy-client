@@ -23,15 +23,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: const Text('Home'),
         actions: <Widget>[
-          IconButton(
-            onPressed: () async {
-              await ref.read(authControllerProvider.notifier).logout();
-              if (!mounted) return;
-              // Navigation handled by guard; optionally force redirect
-              // context.go('/login');
+          PopupMenuButton<String>(
+            onSelected: (String value) async {
+              switch (value) {
+                case 'link_google':
+                  await ref.read(authControllerProvider.notifier).linkWithGoogle();
+                  break;
+                case 'link_apple':
+                  await ref.read(authControllerProvider.notifier).linkWithApple();
+                  break;
+                case 'logout':
+                  await ref.read(authControllerProvider.notifier).logout();
+                  break;
+              }
             },
-            icon: const Icon(Icons.logout),
-            tooltip: 'Выход',
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'link_google',
+                child: Text('Привязать Google'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'link_apple',
+                child: Text('Привязать Apple'),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem<String>(
+                value: 'logout',
+                child: Text('Выход'),
+              ),
+            ],
           ),
         ],
       ),
