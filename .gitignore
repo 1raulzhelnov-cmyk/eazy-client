@@ -8,3 +8,9 @@ dist/
 **/android/local.properties
 .env
 .DS_Store
+
+# Firebase configs (do not commit sensitive files)
+**/google-services.json
+**/GoogleService-Info.plist
+**/firebase_app_id_file.json
+**/firebase.json
