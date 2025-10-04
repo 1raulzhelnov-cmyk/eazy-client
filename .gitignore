@@ -2,6 +2,8 @@ node_modules/
 build/
 dist/
 .dart_tool/
+**/build/
+**/.dart_tool/
 .flutter-plugins*
 **/ios/Pods/
 **/android/.gradle/
@@ -14,4 +16,5 @@ dist/
 **/GoogleService-Info.plist
 **/firebase_app_id_file.json
 **/firebase.json
+**/pubspec.lock
 !apps/client_app/lib/core/firebase/firebase_options.dart

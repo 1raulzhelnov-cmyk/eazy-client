@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:client_app/features/auth/providers.dart';
+import 'package:client_app/features/auth/presentation/auth_controller.dart';
+import 'package:client_app/features/auth/domain/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +17,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Timer? _timer;
 
   void _navigateNext() {
-    final bool isAuthorized = ref.read(isAuthorizedProvider);
+    final auth = ref.read(authControllerProvider);
+    final bool isAuthorized = auth is Authenticated;
     if (!mounted) return;
     context.go(isAuthorized ? '/home' : '/login');
   }

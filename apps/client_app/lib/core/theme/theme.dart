@@ -8,4 +8,3 @@ ThemeData buildLightTheme() {
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 }
-
