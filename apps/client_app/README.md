@@ -7,8 +7,10 @@ Flutter client scaffold with Riverpod, GoRouter, Dio, dotenv, and Firebase Auth.
 1. Copy env:
 ```bash
 cp .env.sample .env
-# set your API base url
-sed -i 's#https://api.eazy.local#http://localhost:8080#g' .env
+# set required keys
+# API_BASE_URL=...
+# GOOGLE_MAPS_API_KEY=...
+# STRIPE_PUBLISHABLE_KEY=...
 ```
 2. Install dependencies:
 ```bash
@@ -33,8 +35,23 @@ flutter analyze
 ```
 5. Run:
 ```bash
-flutter run -d chrome
+flutter run -d ios # or -d macos / android / chrome
 ```
+
+## Routes
+- `/splash` → `/login` or `/home`
+- `/login`, `/verify-otp`
+- `/home`
+- `/catalog`, `/search`, `/cart`, `/profile`
+- `/addresses`, `/address-form`
+
+## CI/CD (iOS TestFlight)
+- Workflow: `.github/workflows/ios-beta.yml`
+- Tag push `vX.Y.Z` triggers build with Flutter 3.24 and Fastlane upload
+- Secrets required:
+  - `APP_STORE_CONNECT_API_KEY_ID`
+  - `APP_STORE_CONNECT_API_ISSUER_ID`
+  - `APP_STORE_CONNECT_API_KEY_CONTENT`
 
 ## Structure
 - `lib/app.dart`: App root with MaterialApp.router
