@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:client_app/features/address/models/address.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PlacesService {
   PlacesService({Dio? dio, String? apiKey})
       : _dio = dio ?? Dio(),
-        _apiKey = apiKey ?? const String.fromEnvironment('GOOGLE_MAPS_API_KEY');
+        _apiKey = apiKey ?? (dotenv.maybeGet('GOOGLE_MAPS_API_KEY') ?? const String.fromEnvironment('GOOGLE_MAPS_API_KEY'));
 
   final Dio _dio;
   final String _apiKey;

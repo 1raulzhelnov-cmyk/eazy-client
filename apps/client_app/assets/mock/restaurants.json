@@ -1,0 +1,4 @@
+[
+  {"id":"r1","name":"Pizza Place","category":"food","rating":4.6,"image":"assets/mock/pizza.png"},
+  {"id":"r2","name":"Sushi Bar","category":"food","rating":4.7,"image":"assets/mock/sushi.png"}
+]
