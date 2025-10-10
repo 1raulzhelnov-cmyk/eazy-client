@@ -3,6 +3,8 @@ import 'package:client_app/features/auth/presentation/auth_controller.dart';
 import 'package:client_app/features/auth/presentation/login_screen.dart';
 import 'package:client_app/features/auth/presentation/verify_otp_screen.dart';
 import 'package:client_app/features/home/presentation/home_screen.dart';
+import 'package:client_app/features/address/ui/addresses_page.dart';
+import 'package:client_app/features/address/ui/address_form_page.dart';
 import 'package:client_app/features/splash/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,6 +50,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/home',
         name: 'home',
         builder: (BuildContext context, GoRouterState state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/addresses',
+        name: 'addresses',
+        builder: (BuildContext context, GoRouterState state) => const AddressesPage(),
+      ),
+      GoRoute(
+        path: '/address-form',
+        name: 'addressForm',
+        builder: (BuildContext context, GoRouterState state) {
+          final String? addressId = state.extra as String?;
+          return AddressFormPage(addressId: addressId);
+        },
       ),
     ],
   );
