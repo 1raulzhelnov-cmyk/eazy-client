@@ -1,13 +1,19 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
+const devServerUrl = process.env.CAP_SERVER_URL;
+
 const config: CapacitorConfig = {
-  appId: 'com.eazy.food',
-  appName: 'EAZY FOOD',
+  appId: 'com.eazy.app',
+  appName: 'Eazy',
   webDir: 'dist',
-  server: {
-    url: 'https://e4676b79-fc99-4c6e-9a2d-8575c2afa291.lovableproject.com?forceHideBadge=true',
-    cleartext: true
-  },
+  ...(devServerUrl
+    ? {
+        server: {
+          url: devServerUrl,
+          cleartext: false,
+        },
+      }
+    : {}),
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,

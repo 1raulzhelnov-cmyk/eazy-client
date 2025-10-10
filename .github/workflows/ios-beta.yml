@@ -1,0 +1,39 @@
+name: iOS Beta
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-upload:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install deps
+        run: npm ci
+      - name: Build web and sync iOS
+        run: |
+          npm run build
+          npx cap sync ios
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Install CocoaPods
+        run: sudo gem install cocoapods
+      - name: Fastlane beta
+        working-directory: ios
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+        run: |
+          echo "json_key: \"${APP_STORE_CONNECT_API_KEY_CONTENT}\"" > fastlane/api_key.json
+          echo "issuer_id: \"${APP_STORE_CONNECT_API_ISSUER_ID}\"" >> fastlane/api_key.json
+          echo "key_id: \"${APP_STORE_CONNECT_API_KEY_ID}\"" >> fastlane/api_key.json
+          bundle exec fastlane beta

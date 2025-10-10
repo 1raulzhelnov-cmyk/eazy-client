@@ -1,0 +1,9 @@
+// Include Pods configuration first
+#include "Pods/Target Support Files/Pods-App/Pods-App.release.xcconfig"
+
+// App configuration
+PRODUCT_BUNDLE_IDENTIFIER = com.eazy.app
+MARKETING_VERSION = 0.0.0
+CURRENT_PROJECT_VERSION = 1
+DEVELOPMENT_TEAM = 
+CODE_SIGN_STYLE = Automatic
