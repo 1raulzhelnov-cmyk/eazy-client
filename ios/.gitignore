@@ -1,0 +1,22 @@
+Pods/
+build/
+DerivedData/
+*.xcuserdatad
+*.xcworkspace/xcuserdata/
+fastlane/report.xml
+fastlane/test_output/
+fastlane/Preview.html
+App/App/GoogleService-Info.plist
+App/build
+App/Pods
+App/output
+App/App/public
+DerivedData
+xcuserdata
+
+# Cordova plugins for Capacitor
+capacitor-cordova-ios-plugins
+
+# Generated Config files
+App/App/capacitor.config.json
+App/App/config.xml
