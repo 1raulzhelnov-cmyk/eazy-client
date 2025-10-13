@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Eazy - Food & Flowers Delivery</title>
+    <meta name="description" content="Eazy - Fast delivery of food, flowers and balloons in Narva in 30 minutes. Order from the best restaurants, fresh bouquets and festive balloons with free delivery." />
+    <meta name="author" content="Eazy" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#ff1493" />
+
+    <!-- Mobile App Meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-stat

@@ -1,20 +1,6 @@
-node_modules/
-build/
-dist/
-.dart_tool/
-**/build/
-**/.dart_tool/
-.flutter-plugins*
-**/ios/Pods/
-**/android/.gradle/
-**/android/local.properties
-.env
+node_modules
+dist
 .DS_Store
-
-# Firebase configs (do not commit sensitive files)
-**/google-services.json
-**/GoogleService-Info.plist
-**/firebase_app_id_file.json
-**/firebase.json
-**/pubspec.lock
-!apps/client_app/lib/core/firebase/firebase_options.dart
+.env
+ios/
+android/

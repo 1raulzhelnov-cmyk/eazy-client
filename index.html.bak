@@ -1,0 +1,34 @@
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#ff1493" /><!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Eazy - Food & Flowers Delivery</title>
+    <meta name="description" content="Eazy - Fast delivery of food, flowers and balloons in Narva in 30 minutes. Order from the best restaurants, fresh bouquets and festive balloons with free delivery." />
+    <meta name="author" content="Eazy" />
+    
+    <!-- Mobile App Meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Eazy" />
+    <meta name="theme-color" content="#db7093" />
+    
+    <!-- SEO and Social Meta -->
+    <meta name="keywords" content="food delivery, flower delivery, balloons, Narva, Estonia, restaurant, fast delivery" />
+
+    <meta property="og:title" content="Eazy - Food & Flowers Delivery" />
+    <meta property="og:description" content="Fast delivery of food, flowers and balloons in Narva in 30 minutes. Free delivery from the best local restaurants!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

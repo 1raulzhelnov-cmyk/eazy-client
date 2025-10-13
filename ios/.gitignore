@@ -1,12 +1,3 @@
-Pods/
-build/
-DerivedData/
-*.xcuserdatad
-*.xcworkspace/xcuserdata/
-fastlane/report.xml
-fastlane/test_output/
-fastlane/Preview.html
-App/App/GoogleService-Info.plist
 App/build
 App/Pods
 App/output
