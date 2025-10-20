@@ -58,6 +58,28 @@ flutter run -d ios # or -d macos / android / chrome
   - `APP_STORE_CONNECT_API_ISSUER_ID`
   - `APP_STORE_CONNECT_API_KEY_CONTENT`
 
+## Build Flavors / Environments
+
+Use `--dart-define` to provide runtime keys in CI without repacking:
+
+```bash
+flutter run --dart-define=API_BASE_URL=https://staging.api \
+  --dart-define=GOOGLE_MAPS_API_KEY=... \
+  --dart-define=STRIPE_PUBLISHABLE_KEY=...
+```
+
+Recommended files: `.env`, `.env.dev`, `.env.prod` for local reference. In CI pass secrets via `--dart-define`.
+
+## Platform permissions
+
+- Android:
+  - INTERNET
+  - ACCESS_FINE_LOCATION (for address suggestions / ETA)
+  - POST_NOTIFICATIONS (Android 13+)
+- iOS:
+  - NSLocationWhenInUseUsageDescription
+  - Sign in with Apple entitlement if using Apple login
+
 ## Structure
 - `lib/app.dart`: App root with MaterialApp.router
 - `lib/core/router/router.dart`: GoRouter configuration

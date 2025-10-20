@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:client_app/shared/utils/feature_flags.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -37,8 +38,10 @@ class MessagingService {
 
       await _fcm.subscribeToTopic('orders');
 
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        debugPrint('FCM foreground: ${message.messageId}');
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        final bool enableRich = await FeatureFlags.richPush();
+        debugPrint('FCM foreground: ${message.messageId} richPush=$enableRich');
+        // UI rendering handled elsewhere; keep core minimal
       });
     } catch (e) {
       debugPrint('Messaging init error: $e');
