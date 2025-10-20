@@ -26,6 +26,7 @@ linter:
     always_use_package_imports: true
     directives_ordering: true
     prefer_final_locals: true
+    public_member_api_docs: false
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

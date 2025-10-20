@@ -1,0 +1,10 @@
+{
+  "@@locale": "ru",
+  "appTitle": "EAZY",
+  "login": "Войти",
+  "logout": "Выход",
+  "addresses": "Адреса",
+  "catalog": "Каталог",
+  "cart": "Корзина",
+  "profile": "Профиль"
+}

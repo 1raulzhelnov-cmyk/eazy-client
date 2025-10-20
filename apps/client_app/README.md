@@ -29,11 +29,16 @@ This generates `lib/core/firebase/firebase_options.dart` (replace the placeholde
   - iOS/macOS: add `GoogleService-Info.plist` per Firebase docs.
   - Web: ensure `index.html` has no conflicting Firebase scripts; FlutterFire handles initialization.
 
-4. Run analysis:
+4. Generate localization (ARB) [placeholder skeleton]:
+```bash
+flutter gen-l10n
+```
+
+5. Run analysis:
 ```bash
 flutter analyze
 ```
-5. Run:
+6. Run:
 ```bash
 flutter run -d ios # or -d macos / android / chrome
 ```
