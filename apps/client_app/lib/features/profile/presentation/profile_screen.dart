@@ -1,6 +1,7 @@
+import 'package:client_app/features/auth/domain/auth_state.dart';
 import 'package:client_app/features/auth/presentation/auth_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:client_app/features/profile/domain/user_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

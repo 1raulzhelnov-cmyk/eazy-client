@@ -1,6 +1,7 @@
 import 'package:client_app/features/address/data/address_repository.dart';
 import 'package:client_app/features/address/data/firebase_address_repository.dart';
 import 'package:client_app/features/address/models/address.dart';
+import 'package:client_app/features/auth/domain/auth_state.dart';
 import 'package:client_app/features/auth/presentation/auth_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

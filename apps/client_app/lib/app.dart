@@ -1,7 +1,5 @@
 import 'package:client_app/core/router/router.dart';
 import 'package:client_app/core/theme/theme.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,9 +23,6 @@ class App extends ConsumerWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-      ],
-      navigatorObservers: <NavigatorObserver>[
-        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       ],
       routerConfig: router,
     );

@@ -1,20 +1,18 @@
+import 'package:client_app/features/address/ui/address_form_page.dart';
+import 'package:client_app/features/address/ui/addresses_page.dart';
 import 'package:client_app/features/auth/domain/auth_state.dart';
 import 'package:client_app/features/auth/presentation/auth_controller.dart';
 import 'package:client_app/features/auth/presentation/login_screen.dart';
 import 'package:client_app/features/auth/presentation/verify_otp_screen.dart';
+import 'package:client_app/features/cart/presentation/cart_screen.dart';
+import 'package:client_app/features/catalog/presentation/catalog_screen.dart';
 import 'package:client_app/features/home/presentation/home_screen.dart';
 import 'package:client_app/features/profile/presentation/profile_screen.dart';
-import 'package:client_app/features/catalog/presentation/catalog_screen.dart';
-import 'package:client_app/features/cart/presentation/cart_screen.dart';
 import 'package:client_app/features/search/presentation/search_screen.dart';
-import 'package:client_app/features/address/ui/addresses_page.dart';
-import 'package:client_app/features/address/ui/address_form_page.dart';
 import 'package:client_app/features/splash/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -23,9 +21,6 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/splash',
-    observers: <NavigatorObserver>[
-      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
-    ],
     redirect: (context, state) {
       final bool isAuth = authState is Authenticated;
       if (!isAuth && state.matchedLocation == '/home') {

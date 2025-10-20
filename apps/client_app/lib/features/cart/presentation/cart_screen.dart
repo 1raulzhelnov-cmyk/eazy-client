@@ -7,7 +7,7 @@ class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  ConsumerState<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends ConsumerState<CartScreen> {
@@ -29,7 +29,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 IconButton(
                   onPressed: () async {
                     setState(() => _count++);
-                    await FirebaseAnalytics.instance.logAddToCart(parameters: <String, Object?>{
+                    await FirebaseAnalytics.instance.logAddToCart(parameters: <String, Object>{
                       'items_count': _count,
                     });
                     final SharedPreferences prefs = await SharedPreferences.getInstance();
