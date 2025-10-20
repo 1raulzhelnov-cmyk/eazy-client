@@ -29,11 +29,16 @@ This generates `lib/core/firebase/firebase_options.dart` (replace the placeholde
   - iOS/macOS: add `GoogleService-Info.plist` per Firebase docs.
   - Web: ensure `index.html` has no conflicting Firebase scripts; FlutterFire handles initialization.
 
-4. Run analysis:
+4. Generate localization (ARB) [placeholder skeleton]:
+```bash
+flutter gen-l10n
+```
+
+5. Run analysis:
 ```bash
 flutter analyze
 ```
-5. Run:
+6. Run:
 ```bash
 flutter run -d ios # or -d macos / android / chrome
 ```
@@ -52,6 +57,28 @@ flutter run -d ios # or -d macos / android / chrome
   - `APP_STORE_CONNECT_API_KEY_ID`
   - `APP_STORE_CONNECT_API_ISSUER_ID`
   - `APP_STORE_CONNECT_API_KEY_CONTENT`
+
+## Build Flavors / Environments
+
+Use `--dart-define` to provide runtime keys in CI without repacking:
+
+```bash
+flutter run --dart-define=API_BASE_URL=https://staging.api \
+  --dart-define=GOOGLE_MAPS_API_KEY=... \
+  --dart-define=STRIPE_PUBLISHABLE_KEY=...
+```
+
+Recommended files: `.env`, `.env.dev`, `.env.prod` for local reference. In CI pass secrets via `--dart-define`.
+
+## Platform permissions
+
+- Android:
+  - INTERNET
+  - ACCESS_FINE_LOCATION (for address suggestions / ETA)
+  - POST_NOTIFICATIONS (Android 13+)
+- iOS:
+  - NSLocationWhenInUseUsageDescription
+  - Sign in with Apple entitlement if using Apple login
 
 ## Structure
 - `lib/app.dart`: App root with MaterialApp.router

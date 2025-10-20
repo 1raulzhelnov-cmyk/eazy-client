@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "appTitle": "EAZY",
+  "login": "Login",
+  "logout": "Logout",
+  "addresses": "Addresses",
+  "catalog": "Catalog",
+  "cart": "Cart",
+  "profile": "Profile"
+}

@@ -1,0 +1,105 @@
+name: Client App CI
+
+on:
+  push:
+    branches: [ main, develop, "cursor/**" ]
+    paths:
+      - 'apps/client_app/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'apps/client_app/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: apps/client_app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.24.0'
+
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.dartServer
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test --coverage
+
+  android-build:
+    runs-on: ubuntu-22.04
+    needs: build
+    defaults:
+      run:
+        working-directory: apps/client_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.24.0'
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Build Android App Bundle (staging)
+        run: |
+          echo 'API_BASE_URL=${{ secrets.API_BASE_URL_STAGING }}' > .env.prod
+          echo 'GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}' >> .env.prod
+          echo 'STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY_STAGING }}' >> .env.prod
+          flutter build appbundle --release --dart-define-from-file=.env.prod --split-debug-info=build/symbols --obfuscate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: client-app-aab
+          path: apps/client_app/build/app/outputs/bundle/release/*.aab
+
+  ios-build:
+    runs-on: macos-14
+    needs: build
+    defaults:
+      run:
+        working-directory: apps/client_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.24.0'
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Install Ruby and CocoaPods
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: false
+      - run: sudo gem install cocoapods fastlane
+      - name: Build iOS (ad-hoc)
+        working-directory: apps/client_app/ios
+        run: |
+          cd ..
+          echo 'API_BASE_URL=${{ secrets.API_BASE_URL_STAGING }}' > .env.prod
+          echo 'GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}' >> .env.prod
+          echo 'STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY_STAGING }}' >> .env.prod
+          cd ios
+          xcrun agvtool new-marketing-version 1.0.0
+          xcrun agvtool new-version -all 1
+          cd ..
+          flutter build ipa --release --dart-define-from-file=.env.prod --split-debug-info=build/symbols --obfuscate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: client-app-ipa
+          path: apps/client_app/build/ios/ipa/*.ipa

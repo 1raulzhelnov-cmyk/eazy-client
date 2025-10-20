@@ -53,7 +53,7 @@ class _AddressFormPageState extends ConsumerState<AddressFormPage> {
     final items = ref.read(addressesProvider).value ?? <Address>[];
     final a = items.firstWhere(
       (x) => x.id == widget.addressId,
-      orElse: () => const Address(
+      orElse: () => Address(
         id: '',
         fullText: '',
         country: '',

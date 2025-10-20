@@ -3,6 +3,7 @@ import 'package:client_app/features/auth/data/auth_storage.dart';
 import 'package:client_app/features/auth/data/firebase_auth_repository.dart';
 import 'package:client_app/features/auth/domain/auth_state.dart';
 import 'package:client_app/features/auth/domain/auth_tokens.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authControllerProvider = NotifierProvider<AuthController, AuthState>(
@@ -51,6 +52,7 @@ class AuthController extends Notifier<AuthState> {
         refreshToken: tokens.refreshToken,
       );
       state = const Authenticated(userId: 'user');
+      await FirebaseAnalytics.instance.logLogin(loginMethod: 'otp');
     } catch (e) {
       state = ErrorState(e.toString());
     }
@@ -62,6 +64,7 @@ class AuthController extends Notifier<AuthState> {
       await _api.logout();
       await _storage.clear();
       state = const Unauthenticated();
+      await FirebaseAnalytics.instance.logEvent(name: 'logout');
     } catch (e) {
       state = ErrorState(e.toString());
     }
@@ -72,6 +75,7 @@ class AuthController extends Notifier<AuthState> {
     try {
       await _firebaseRepo.signInWithGoogle();
       state = const Authenticated(userId: 'firebase');
+      await FirebaseAnalytics.instance.logLogin(loginMethod: 'google');
     } catch (e) {
       state = ErrorState(e.toString());
     }
@@ -82,6 +86,7 @@ class AuthController extends Notifier<AuthState> {
     try {
       await _firebaseRepo.signInWithApple();
       state = const Authenticated(userId: 'firebase');
+      await FirebaseAnalytics.instance.logLogin(loginMethod: 'apple');
     } catch (e) {
       state = ErrorState(e.toString());
     }

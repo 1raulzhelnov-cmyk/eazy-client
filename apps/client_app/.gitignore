@@ -1,3 +1,16 @@
+.env
+.env.dev
+.env.prod
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.idea/
+**/.vscode/
+**/Generated.xcconfig
+**/Pods/
+**/Podfile.lock
 # Miscellaneous
 *.class
 *.log

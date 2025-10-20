@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:client_app/features/address/models/address.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+// no-op import cleanup to satisfy lints
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PlacesService {
