@@ -12,4 +12,8 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
+  build: {
+    assetsInlineLimit: 0,
+    sourcemap: false,
+  }
 }));

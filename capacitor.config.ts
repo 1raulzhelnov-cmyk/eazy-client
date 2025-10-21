@@ -6,8 +6,10 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   // Не указывать server.url для production-сборок Capacitor
   server: {
-    androidScheme: 'https',
+    url: undefined,
     cleartext: true,
+    allowNavigation: [],
+    androidScheme: 'https',
   },
   plugins: {
     SplashScreen: {
