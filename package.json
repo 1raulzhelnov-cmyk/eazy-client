@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:ios": "npm run build && npx cap sync ios",
+    "build:ios": "npm run build && npx cap copy ios && npx cap sync ios",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean:derived": "rm -rf ~/Library/Developer/Xcode/DerivedData/*"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
