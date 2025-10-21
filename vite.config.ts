@@ -4,6 +4,8 @@ import path from 'path';
 import { componentTagger } from 'lovable-tagger';
 
 export default defineConfig(({ mode }) => ({
+  // Важно для Capacitor iOS: относительная база, чтобы ассеты грузились из dist
+  base: './',
   server: { host: "0.0.0.0", port: 3000 },
   plugins: [
     react(),

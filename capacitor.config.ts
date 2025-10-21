@@ -1,19 +1,14 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
-const devServerUrl = process.env.CAP_SERVER_URL;
-
 const config: CapacitorConfig = {
   appId: 'com.eazy.app',
   appName: 'Eazy',
   webDir: 'dist',
-  ...(devServerUrl
-    ? {
-        server: {
-          url: devServerUrl,
-          cleartext: false,
-        },
-      }
-    : {}),
+  // Не указывать server.url для production-сборок Capacitor
+  server: {
+    androidScheme: 'https',
+    cleartext: true,
+  },
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,
