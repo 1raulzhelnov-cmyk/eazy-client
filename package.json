@@ -7,8 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "build:ios": "npm run build && npx cap copy ios && npx cap sync ios",
+    "postmerge": "npm ci && npm run build:ios",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "clean:derived": "rm -rf ~/Library/Developer/Xcode/DerivedData/*"
   },
