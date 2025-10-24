@@ -6528,10 +6528,10 @@ react-native-gesture-handler@^2.29.0:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
 
-react-native-maps@^1.15.7:
-  version "1.26.18"
-  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-1.26.18.tgz#1bb412d236a1a187c93f5e63a8d912d8d5beca6d"
-  integrity sha512-aJeczgR2Y5AeAazod3QAIkpAqNteYjKlZUH8YRKueaORsjdDbGryD/4aPL8UR4J6bjsSJK8lgzoMCvCky6FRpA==
+react-native-maps@1.15.7:
+  version "1.15.7"
+  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-1.15.7.tgz#530308979f44b91c01f96f0a8c8b2fa44dd74a47"
+  integrity sha512-Uo9YqxeGFn1UbncLnCKWseSjwp1UtNnH3Zd+7GY3Kryd17SjSVOb72AZBrQl6+5GmBTQj32oqlrQ/lcokfPzQQ==
   dependencies:
     "@types/geojson" "^7946.0.13"
 
