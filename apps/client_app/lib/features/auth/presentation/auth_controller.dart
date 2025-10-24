@@ -36,23 +36,66 @@ class AuthController extends Notifier<AuthState> {
   Future<void> sendOtp(String emailOrPhone) async {
     state = const Loading();
     try {
-      await _api.requestOtp(emailOrPhone);
-      state = const Unauthenticated();
+      final bool isPhone = emailOrPhone.contains(RegExp(r'^[+0-9().\-\s]+
+')) && emailOrPhone.contains(RegExp(r'[0-9]{6,}'));
+      if (isPhone) {
+        await _firebaseRepo.sendPhoneOtp(
+          phoneNumber: emailOrPhone,
+          onCodeSent: (String verificationId) {
+            state = OtpSent(verificationId: verificationId, phone: emailOrPhone);
+          },
+          onError: (e) {
+            state = ErrorState(e.message ?? 'Ошибка отправки кода');
+          },
+        );
+      } else {
+        await _api.requestOtp(emailOrPhone);
+        state = const Unauthenticated();
+      }
     } catch (e) {
       state = ErrorState(e.toString());
     }
   }
 
   Future<void> verifyOtp(String emailOrPhone, String code) async {
+    final current = state;
     state = const Loading();
     try {
-      final AuthTokens tokens = await _api.verifyOtp(emailOrPhone, code);
-      await _storage.saveTokens(
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      );
-      state = const Authenticated(userId: 'user');
-      await FirebaseAnalytics.instance.logLogin(loginMethod: 'otp');
+      if (current is OtpSent) {
+        await _firebaseRepo.verifyPhoneOtp(verificationId: current.verificationId, smsCode: code);
+        state = const Authenticated(userId: 'firebase');
+        await FirebaseAnalytics.instance.logLogin(loginMethod: 'phone_otp');
+      } else {
+        final AuthTokens tokens = await _api.verifyOtp(emailOrPhone, code);
+        await _storage.saveTokens(
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        );
+        state = const Authenticated(userId: 'user');
+        await FirebaseAnalytics.instance.logLogin(loginMethod: 'otp');
+      }
+    } catch (e) {
+      state = ErrorState(e.toString());
+    }
+  }
+
+  Future<void> registerWithEmail(String email, String password) async {
+    state = const Loading();
+    try {
+      await _firebaseRepo.registerWithEmail(email: email, password: password);
+      state = const Authenticated(userId: 'firebase');
+      await FirebaseAnalytics.instance.logSignUp(signUpMethod: 'email');
+    } catch (e) {
+      state = ErrorState(e.toString());
+    }
+  }
+
+  Future<void> loginWithEmail(String email, String password) async {
+    state = const Loading();
+    try {
+      await _firebaseRepo.loginWithEmail(email: email, password: password);
+      state = const Authenticated(userId: 'firebase');
+      await FirebaseAnalytics.instance.logLogin(loginMethod: 'email');
     } catch (e) {
       state = ErrorState(e.toString());
     }
@@ -61,6 +104,9 @@ class AuthController extends Notifier<AuthState> {
   Future<void> logout() async {
     state = const Loading();
     try {
+      try {
+        await _firebaseRepo.signOut();
+      } catch (_) {}
       await _api.logout();
       await _storage.clear();
       state = const Unauthenticated();

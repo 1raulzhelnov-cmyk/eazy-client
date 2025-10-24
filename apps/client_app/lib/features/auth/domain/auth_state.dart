@@ -20,3 +20,9 @@ class ErrorState extends AuthState {
   final String message;
 }
 
+class OtpSent extends AuthState {
+  const OtpSent({required this.verificationId, required this.phone});
+  final String verificationId;
+  final String phone;
+}
+

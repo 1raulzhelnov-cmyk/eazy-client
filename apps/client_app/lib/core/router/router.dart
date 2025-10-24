@@ -4,6 +4,7 @@ import 'package:client_app/features/auth/domain/auth_state.dart';
 import 'package:client_app/features/auth/presentation/auth_controller.dart';
 import 'package:client_app/features/auth/presentation/login_screen.dart';
 import 'package:client_app/features/auth/presentation/verify_otp_screen.dart';
+import 'package:client_app/features/auth/presentation/register_screen.dart';
 import 'package:client_app/features/cart/presentation/cart_screen.dart';
 import 'package:client_app/features/catalog/presentation/catalog_screen.dart';
 import 'package:client_app/features/home/presentation/home_screen.dart';
@@ -41,6 +42,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/login',
         name: 'login',
         builder: (BuildContext context, GoRouterState state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (BuildContext context, GoRouterState state) => const RegisterScreen(),
       ),
       GoRoute(
         path: '/auth',
