@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -15,6 +15,7 @@ import {
   Text,
   useColorScheme,
   View,
+  ActivityIndicator,
 } from 'react-native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -67,6 +68,7 @@ function SmokeScreen(): React.JSX.Element {
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -74,16 +76,25 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     validateEnv();
+    const timeoutId = setTimeout(() => setIsLoading(false), 900);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
     <SafeAreaView style={[backgroundStyle, { flex: 1 }] }>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Smoke" component={SmokeScreen} options={{ title: 'Smoke Test' }} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      {isLoading ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: isDarkMode ? Colors.black : Colors.white }}>
+          <ActivityIndicator size="large" color={isDarkMode ? Colors.white : Colors.black} />
+          <Text style={{ marginTop: 12, fontSize: 16, color: isDarkMode ? Colors.white : Colors.black }}>Загрузка…</Text>
+        </View>
+      ) : (
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Smoke" component={SmokeScreen} options={{ title: 'Smoke Test' }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      )}
     </SafeAreaView>
   );
 }
