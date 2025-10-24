@@ -23,7 +23,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
   }
 
   Future<void> _verify() async {
-    await ref.read(authControllerProvider.notifier).verifyOtp(widget.contact, _codeController.text);
+    await ref.read(authControllerProvider.notifier).verifyOtp(widget.contact, _codeController.text.trim());
     final state = ref.read(authControllerProvider);
     if (state is Authenticated) {
       if (!mounted) return;
